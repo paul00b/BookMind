@@ -130,10 +130,9 @@ export default function TrendingSeriesSlider({ onSelect }: TrendingSeriesSliderP
       </div>
 
       {/* Slider */}
-      <div className="-mx-4 md:mx-0">
-        <div
+      <div
           ref={scrollRef}
-          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0"
+          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {initialLoading
@@ -167,7 +166,6 @@ export default function TrendingSeriesSlider({ onSelect }: TrendingSeriesSliderP
           {loadingMore && Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={`sk-${i}`} />)}
           <div ref={sentinelRef} className="flex-shrink-0 w-1" />
         </div>
-      </div>
     </div>
   );
 }

@@ -34,7 +34,7 @@ function EpisodeDetailSheet({ info, onClose }: { info: SelectedEpisodeInfo; onCl
     <SheetModal
       onClose={onClose}
       rootClassName="z-[70]"
-      panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[80vh] flex flex-col overflow-hidden"
+      panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[80dvh] flex flex-col overflow-hidden"
     >
       <SheetCloseButton className="absolute top-4 right-4 btn-ghost p-2 z-10">
         <X size={20} />
@@ -299,7 +299,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
     <>
     <SheetModal
       onClose={onClose}
-      panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[90vh] flex flex-col overflow-hidden"
+      panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[90dvh] flex flex-col overflow-hidden"
     >
         <SheetCloseButton className="absolute top-4 right-4 btn-ghost p-2 z-10">
           <X size={20} />

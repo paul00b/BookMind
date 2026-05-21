@@ -89,7 +89,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   return (
     <SheetModal
       onClose={onClose}
-      panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
+      panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[90dvh]"
       scrollable
     >
         {/* Close */}

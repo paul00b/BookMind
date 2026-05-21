@@ -34,9 +34,8 @@ function WantToReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-1">
         {t('home.wantToRead')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div
-          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0"
+      <div
+          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {wantToRead.map(book => (
@@ -62,7 +61,6 @@ function WantToReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -83,10 +81,9 @@ function LastReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-1">
         {t('home.lastRead')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div
+      <div
           ref={sliderRef}
-          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0"
+          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {lastRead.map(book => (
@@ -119,7 +116,6 @@ function LastReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -368,7 +364,7 @@ export default function Home() {
       )}
 
 
-      <div className={(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}>
+      <div className={`w-full ${(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}`}>
         <SearchSectionStack
           items={orderedSections.map(section => ({
             ...section,

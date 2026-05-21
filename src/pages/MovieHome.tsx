@@ -36,9 +36,8 @@ function WantToWatchSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
         <Bookmark size={14} />
         {t('movieHome.wantToWatch')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div
-          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0"
+      <div
+          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {wantToWatch.map(movie => (
@@ -64,7 +63,6 @@ function WantToWatchSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -85,9 +83,8 @@ function LastWatchedSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
         <CheckCheck size={14} />
         {t('movieHome.lastWatched')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div
-          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0"
+      <div
+          className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {lastWatched.map(movie => (
@@ -118,7 +115,6 @@ function LastWatchedSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -384,7 +380,7 @@ export default function MovieHome() {
       )}
 
 
-      <div className={(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}>
+      <div className={`w-full ${(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}`}>
         <SearchSectionStack
           items={orderedSections.map(section => ({
             ...section,

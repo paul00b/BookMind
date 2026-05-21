@@ -39,8 +39,7 @@ function WantToWatchSlider({ onSelect }: { onSelect: (s: Series) => void }) {
         <Bookmark size={14} />
         {t('seriesHome.wantToWatch')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
+      <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
           {wantToWatch.map(s => {
             const futureLabel = formatWaitingLabel(
               s.first_air_date,
@@ -57,12 +56,11 @@ function WantToWatchSlider({ onSelect }: { onSelect: (s: Series) => void }) {
             return <SeriesSlideCard key={s.id} s={s} onSelect={onSelect} badge={badge} />;
           })}
         </div>
-      </div>
     </div>
   );
 }
 
-const SLIDER_CLASS = 'flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0';
+const SLIDER_CLASS = 'flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth';
 const SLIDER_STYLE: React.CSSProperties = { scrollbarWidth: 'none', msOverflowStyle: 'none' };
 
 function SeriesSlideCard({ s, onSelect, badge }: { s: Series; onSelect: (s: Series) => void; badge: React.ReactNode }) {
@@ -102,8 +100,7 @@ function WatchingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
         <Play size={14} />
         {t('seriesHome.watching')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
+      <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
           {activeWatching.map(s => (
             <SeriesSlideCard key={s.id} s={s} onSelect={onSelect} badge={
               <span className="absolute bottom-1.5 right-1.5 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-md bg-blue-500">
@@ -112,7 +109,6 @@ function WatchingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
             } />
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -142,8 +138,7 @@ function WaitingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
         <Clock size={14} />
         {t('seriesHome.waitingNextSeason')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
+      <div className={SLIDER_CLASS} style={SLIDER_STYLE}>
           {waitingNextSeason.map(s => (
             <SeriesSlideCard key={s.id} s={s} onSelect={onSelect} badge={
               <span className="absolute bottom-1.5 right-1.5 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-md bg-purple-500">
@@ -152,7 +147,6 @@ function WaitingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
             } />
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -173,8 +167,7 @@ function LastWatchedSlider({ onSelect }: { onSelect: (s: Series) => void }) {
         <CheckCheck size={14} />
         {t('seriesHome.lastWatched')}
       </h2>
-      <div className="-mx-4 md:mx-0">
-        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth px-4 md:px-0 scroll-px-4 md:scroll-px-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {lastWatched.map(s => (
             <div key={s.id} onClick={() => onSelect(s)} className="flex-shrink-0 snap-start group cursor-pointer">
               <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
@@ -199,7 +192,6 @@ function LastWatchedSlider({ onSelect }: { onSelect: (s: Series) => void }) {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 }
@@ -455,7 +447,7 @@ export default function SeriesHome() {
       {searchError && <p className="mt-3 text-sm text-red-500">{searchError}</p>}
 
 
-      <div className={(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}>
+      <div className={`w-full ${(dropdownOpen || searching) && query ? 'pointer-events-none select-none' : ''}`}>
         <SearchSectionStack
           items={orderedSections.map(section => ({
             ...section,
