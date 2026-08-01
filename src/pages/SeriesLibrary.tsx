@@ -141,7 +141,12 @@ export default function SeriesLibrary() {
 
   const filtered = useMemo(() => {
     if (!isStatusTab) return [];
-    let list = series.filter(s => getEffectiveSeriesStatus(s) === (activeTab as SeriesStatus));
+    let list = series.filter(s => {
+      const status = getEffectiveSeriesStatus(s);
+      if (activeTab === 'watching') return status === 'watching' || isWaitingForNextSeason(s);
+      if (activeTab === 'watched') return status === 'watched' && !isWaitingForNextSeason(s);
+      return status === activeTab;
+    });
     if (genreFilter) list = list.filter(s => s.genre === genreFilter);
     if (creatorFilter) list = list.filter(s => s.creator === creatorFilter);
     return [...list].sort((a, b) => {
@@ -158,13 +163,19 @@ export default function SeriesLibrary() {
     return series.filter(s => activeCategory.series_ids.includes(s.id));
   }, [series, activeCategory]);
 
-  const tabSeries = series.filter(s => isStatusTab && getEffectiveSeriesStatus(s) === (activeTab as SeriesStatus));
+  const tabSeries = series.filter(s => {
+    if (!isStatusTab) return false;
+    const status = getEffectiveSeriesStatus(s);
+    if (activeTab === 'watching') return status === 'watching' || isWaitingForNextSeason(s);
+    if (activeTab === 'watched') return status === 'watched' && !isWaitingForNextSeason(s);
+    return status === activeTab;
+  });
   const genres = [...new Set(tabSeries.map(s => s.genre).filter(Boolean))] as string[];
   const creators = [...new Set(tabSeries.map(s => s.creator).filter(Boolean))] as string[];
 
   const counts = {
-    watched: series.filter(s => getEffectiveSeriesStatus(s) === 'watched').length,
-    watching: series.filter(s => getEffectiveSeriesStatus(s) === 'watching').length,
+    watched: series.filter(s => getEffectiveSeriesStatus(s) === 'watched' && !isWaitingForNextSeason(s)).length,
+    watching: series.filter(s => getEffectiveSeriesStatus(s) === 'watching' || isWaitingForNextSeason(s)).length,
     want_to_watch: series.filter(s => getEffectiveSeriesStatus(s) === 'want_to_watch').length,
   };
 
@@ -298,7 +309,7 @@ export default function SeriesLibrary() {
       )}
 
       {isStatusTab && tabSeries.length > 0 && (
-        <div className="-mx-4 mb-6 overflow-x-auto overflow-y-hidden px-4 [touch-action:pan-x] md:mx-0 md:px-0" style={{ scrollbarWidth: 'none' }}>
+        <div className="-mx-4 mb-6 overflow-x-auto overflow-y-hidden px-4 py-1 [touch-action:pan-x] md:mx-0 md:px-0" style={{ scrollbarWidth: 'none' }}>
           <div className="flex min-w-max items-center gap-2 pb-1">
             <SelectDropdown value={genreFilter} onChange={setGenreFilter} options={[{ value: '', label: t('seriesLibrary.allGenres') }, ...genres.map(g => ({ value: g, label: g }))]} />
             <SelectDropdown value={creatorFilter} onChange={setCreatorFilter} options={[{ value: '', label: t('seriesLibrary.allCreators') }, ...creators.map(c => ({ value: c, label: c }))]} />
@@ -385,43 +396,6 @@ export default function SeriesLibrary() {
                 ) : (
                   <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
                     {waiting.map(s => <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        );
-      })() : activeTab === 'watched' ? (() => {
-        const withNewSeason = filtered.filter(s => isWaitingForNextSeason(s));
-        const rest = filtered.filter(s => !isWaitingForNextSeason(s));
-        return (
-          <div className="space-y-8">
-            {rest.length > 0 && (
-              <div>
-                {withNewSeason.length > 0 && (
-                  <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{t('seriesLibrary.watching')}</h2>
-                )}
-                {viewMode === 'grid' ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {rest.map(s => <SeriesCard key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
-                  </div>
-                ) : (
-                  <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
-                    {rest.map(s => <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
-                  </div>
-                )}
-              </div>
-            )}
-            {withNewSeason.length > 0 && (
-              <div>
-                <h2 className="text-xs font-semibold text-purple-500 dark:text-purple-400 uppercase tracking-wider mb-4 flex items-center gap-1.5"><Clock size={13} />{t('seriesLibrary.waitingNextSeason')}</h2>
-                {viewMode === 'grid' ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {withNewSeason.map(s => <SeriesCard key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
-                  </div>
-                ) : (
-                  <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
-                    {withNewSeason.map(s => <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
                   </div>
                 )}
               </div>

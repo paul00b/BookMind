@@ -79,6 +79,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInWithApple = async () => {
+    if (!isNative()) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      });
+      return { error: error as Error | null };
+    }
+
     try {
       const { idToken, nonce, profile } = await nativeAppleSignIn();
       const { error } = await supabase.auth.signInWithIdToken({

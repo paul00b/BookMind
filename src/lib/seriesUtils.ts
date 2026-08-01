@@ -51,12 +51,18 @@ export function deriveSeriesStatus(
 }
 
 export function getEffectiveSeriesStatus(series: Series): 'watched' | 'watching' | 'want_to_watch' {
-  return deriveSeriesStatus(
+  const status = deriveSeriesStatus(
     series.watched_seasons ?? [],
     series.seasons,
     false,
     series.watched_episodes ?? {}
   );
+
+  if (status === 'watched' && series.next_season_number !== null && isFutureAirDate(series.next_air_date)) {
+    return 'watching';
+  }
+
+  return status;
 }
 
 /**
@@ -71,6 +77,7 @@ export function isSeriesWaiting(s: Series): boolean {
   if (effectiveStatus === 'watched') return true;
 
   if (s.next_episode_number !== null && s.next_episode_number > 1) {
+    if (s.watched_seasons.includes(s.next_season_number)) return true;
     return hasWatchedAllPreviousEpisodesInNextSeason(s);
   }
 

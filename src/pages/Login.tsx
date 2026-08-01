@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isIOS } from '../lib/platform';
+import { isIOS, isNative } from '../lib/platform';
 import nookmindLogo from '/logo.png';
 
 export default function Login() {
@@ -18,7 +18,7 @@ export default function Login() {
   const [success, setSuccess] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
-  const showAppleSignIn = isIOS();
+  const showAppleSignIn = !isNative() || isIOS();
 
   if (user) return <Navigate to="/" replace />;
 

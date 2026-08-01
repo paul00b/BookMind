@@ -10,7 +10,7 @@ export default function Privacy() {
             <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">1. Données collectées</h2>
             <p>NookMind collecte uniquement les données nécessaires au fonctionnement de l'application :</p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Adresse e-mail et identifiant de compte (via Google OAuth ou inscription directe)</li>
+              <li>Adresse e-mail et identifiant de compte (via Google OAuth, Apple OAuth ou inscription directe)</li>
               <li>Données de bibliothèque : livres, films et séries ajoutés, notes personnelles, statuts de lecture/visionnage</li>
             </ul>
           </section>
@@ -27,7 +27,7 @@ export default function Privacy() {
 
           <section>
             <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">3. Hébergement et sécurité</h2>
-            <p>Les données sont stockées sur <a href="https://supabase.com" className="text-amber-600 hover:underline" target="_blank" rel="noopener noreferrer">Supabase</a>, un service sécurisé conforme aux standards RGPD. L'authentification Google est gérée via OAuth 2.0.</p>
+            <p>Les données sont stockées sur <a href="https://supabase.com" className="text-amber-600 hover:underline" target="_blank" rel="noopener noreferrer">Supabase</a>, un service sécurisé conforme aux standards RGPD. Les authentifications Google et Apple sont gérées via OAuth 2.0.</p>
           </section>
 
           <section>

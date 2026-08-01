@@ -52,7 +52,7 @@ describe('isSeriesWaiting', () => {
       seasons: 3,
       watched_seasons: [1, 2],
       watched_episodes: {},
-      next_air_date: '2026-07-02',
+      next_air_date: '2099-07-02',
       next_season_number: 3,
     }))).toBe(true);
   });
@@ -73,10 +73,37 @@ describe('isSeriesWaiting', () => {
       watched_seasons: [1, 2, 3, 4],
       seasons: 5,
       watched_episodes: { '5': [1, 2, 3, 4] },
-      next_air_date: '2026-04-29',
+      next_air_date: '2099-04-29',
       next_season_number: 5,
       next_episode_number: 5,
     }))).toBe(true);
+  });
+
+  it('keeps a series watching when the next episode has not aired yet', () => {
+    const series = makeSeries({
+      seasons: 1,
+      watched_seasons: [1],
+      watched_episodes: { '1': [1] },
+      next_air_date: '2099-05-08',
+      next_season_number: 1,
+      next_episode_number: 2,
+    });
+
+    expect(getEffectiveSeriesStatus(series)).toBe('watching');
+    expect(isSeriesWaiting(series)).toBe(true);
+  });
+
+  it('waits when the season is marked complete and the next episode is future', () => {
+    const series = makeSeries({
+      seasons: 1,
+      watched_seasons: [1],
+      watched_episodes: {},
+      next_air_date: '2099-05-08',
+      next_season_number: 1,
+      next_episode_number: 2,
+    });
+
+    expect(isSeriesWaiting(series)).toBe(true);
   });
 
   it('returns false when a new season is already airing even if no episode has been marked yet', () => {
