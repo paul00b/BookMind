@@ -6,6 +6,8 @@ import StarRating from './StarRating';
 import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
 import { fetchMovieDetails, getPosterUrl } from '../lib/tmdb';
+import { fetchMovieImdbRating } from '../lib/imdb';
+import { getRatingStyle } from '../lib/imdbRatingStyle';
 import { useTranslation } from 'react-i18next';
 import ActorSheet from './ActorSheet';
 
@@ -49,6 +51,9 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
   const [tmdbMovie, setTmdbMovie] = useState<TmdbMovie | null>(null);
   const [castOpen, setCastOpen] = useState(false);
   const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
+  const [imdbRating, setImdbRating] = useState<number | null>(null);
+  const [imdbId, setImdbId] = useState<string | null>(null);
+  const [imdbLoading, setImdbLoading] = useState(true);
   const isFromSearch = !!prefill;
 
   useEffect(() => {
@@ -59,6 +64,24 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
     });
     return () => { active = false; };
   }, [isFromSearch, form.tmdb_id]);
+
+  useEffect(() => {
+    if (!isFromSearch) return;
+    // IMDb mostly indexes original-language titles — wait for the TMDB details fetch
+    // (which carries original_title) before searching, rather than searching on a
+    // possibly-translated title and finding nothing.
+    if (form.tmdb_id && !tmdbMovie) return;
+    let active = true;
+    const title = tmdbMovie?.original_title || form.title;
+    const year = form.release_date ? Number(form.release_date.slice(0, 4)) : null;
+    fetchMovieImdbRating(title, year).then(result => {
+      if (!active) return;
+      setImdbRating(result?.rating ?? null);
+      setImdbId(result?.imdbId ?? null);
+      setImdbLoading(false);
+    });
+    return () => { active = false; };
+  }, [isFromSearch, form.tmdb_id, tmdbMovie, form.title, form.release_date]);
 
   const cast = (tmdbMovie?.credits?.cast ?? []).slice(0, 12);
 
@@ -207,6 +230,27 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
                 }`}>
                   {form.status === 'watched' ? t('movieDetail.watched') : t('movieDetail.wantToWatch')}
                 </span>
+                {imdbLoading ? (
+                  <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse font-bold text-transparent">
+                    0.0
+                  </span>
+                ) : imdbRating != null && (
+                  imdbId ? (
+                    <a
+                      href={`https://www.imdb.com/title/${imdbId}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1 rounded-full font-bold hover:opacity-80 transition-opacity"
+                      style={getRatingStyle(imdbRating)}
+                    >
+                      {imdbRating.toFixed(1)}
+                    </a>
+                  ) : (
+                    <span className="px-3 py-1 rounded-full font-bold" style={getRatingStyle(imdbRating)}>
+                      {imdbRating.toFixed(1)}
+                    </span>
+                  )
+                )}
                 {form.release_date && (
                   <span className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full">
                     {new Date(form.release_date).toLocaleDateString(
