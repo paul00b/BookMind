@@ -37,6 +37,7 @@ export default function AppLayout() {
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchBlocked = useRef(false);
+  const isDragging = useRef(false);
 
   function isInsideHScroll(el: EventTarget | null): boolean {
     let node = el as HTMLElement | null;
@@ -51,21 +52,27 @@ export default function AppLayout() {
     return false;
   }
 
+  const DRAG_START_THRESHOLD = 10; // px of horizontal movement before this counts as a swipe, not a tap
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchBlocked.current = isInsideHScroll(e.target);
     if (touchBlocked.current) return;
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
+    isDragging.current = false;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchBlocked.current || touchStartX.current === null || touchStartY.current === null || !mainRef.current) return;
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
-    if (Math.abs(dx) > Math.abs(dy)) {
-      mainRef.current.style.transform = `translateX(${dx * 0.25}px)`;
-      mainRef.current.style.transition = 'none';
+    if (!isDragging.current) {
+      // Ignore a normal tap's finger jitter — only engage once the move is clearly a horizontal swipe.
+      if (Math.abs(dx) < DRAG_START_THRESHOLD || Math.abs(dx) <= Math.abs(dy)) return;
+      isDragging.current = true;
     }
+    mainRef.current.style.transform = `translateX(${dx * 0.25}px)`;
+    mainRef.current.style.transition = 'none';
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -75,6 +82,10 @@ export default function AppLayout() {
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     touchStartX.current = null;
     touchStartY.current = null;
+    const wasDragging = isDragging.current;
+    isDragging.current = false;
+
+    if (!wasDragging) return; // plain tap — never touched mainRef's style, nothing to reset
 
     if (mainRef.current) {
       const el = mainRef.current;
