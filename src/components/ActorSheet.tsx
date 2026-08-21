@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { X, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { fetchPersonDetails, getPosterUrl } from '../lib/tmdb';
+import { fetchPersonDetails, fetchMovieDetails, fetchSeriesDetails, extractMovieData, extractSeriesData, getPosterUrl } from '../lib/tmdb';
 import type { TmdbPerson } from '../types';
 import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
+import AddMovieModal from './AddMovieModal';
+import AddSeriesModal from './AddSeriesModal';
+
+type Credit = NonNullable<NonNullable<TmdbPerson['combined_credits']>['cast']>[number];
 
 interface Props {
   personId: number;
@@ -14,6 +18,9 @@ interface Props {
 export default function ActorSheet({ personId, onClose }: Props) {
   const { t, i18n } = useTranslation();
   const [person, setPerson] = useState<TmdbPerson | null>(null);
+  const [selectingCreditId, setSelectingCreditId] = useState<number | null>(null);
+  const [moviePrefill, setMoviePrefill] = useState<ReturnType<typeof extractMovieData> | null>(null);
+  const [seriesPrefill, setSeriesPrefill] = useState<ReturnType<typeof extractSeriesData> | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -32,7 +39,21 @@ export default function ActorSheet({ personId, onClose }: Props) {
     .sort((a, b) => (b.title ?? b.name ?? '').localeCompare(a.title ?? a.name ?? ''))
     .slice(0, 20);
 
+  const handleSelectCredit = async (credit: Credit) => {
+    if (selectingCreditId != null) return;
+    setSelectingCreditId(credit.id);
+    if (credit.media_type === 'movie') {
+      const details = await fetchMovieDetails(credit.id);
+      if (details) setMoviePrefill(extractMovieData(details));
+    } else {
+      const details = await fetchSeriesDetails(credit.id);
+      if (details) setSeriesPrefill(extractSeriesData(details));
+    }
+    setSelectingCreditId(null);
+  };
+
   return (
+    <>
     <SheetModal
       onClose={onClose}
       rootClassName="z-[70]"
@@ -85,14 +106,25 @@ export default function ActorSheet({ personId, onClose }: Props) {
               {filmography.map(credit => {
                 const poster = getPosterUrl(credit.poster_path ?? null);
                 return (
-                  <div key={`${credit.media_type}-${credit.id}`} className="w-20 flex-shrink-0">
-                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <button
+                    type="button"
+                    key={`${credit.media_type}-${credit.id}`}
+                    onClick={() => handleSelectCredit(credit)}
+                    disabled={selectingCreditId != null}
+                    className="w-20 flex-shrink-0 text-left disabled:opacity-60"
+                  >
+                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 relative">
                       {poster && <img src={poster} alt={credit.title ?? credit.name} className="w-full h-full object-cover" loading="lazy" />}
+                      {selectingCreditId === credit.id && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                          <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        </div>
+                      )}
                     </div>
                     <p className="mt-1.5 text-[11px] font-medium text-gray-700 dark:text-gray-300 leading-tight line-clamp-2">
                       {credit.title ?? credit.name}
                     </p>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -100,5 +132,13 @@ export default function ActorSheet({ personId, onClose }: Props) {
         )}
       </div>
     </SheetModal>
+
+    {moviePrefill && (
+      <AddMovieModal prefill={moviePrefill} onClose={() => setMoviePrefill(null)} rootClassName="z-[80]" />
+    )}
+    {seriesPrefill && (
+      <AddSeriesModal prefill={seriesPrefill} onClose={() => setSeriesPrefill(null)} rootClassName="z-[80]" />
+    )}
+    </>
   );
 }

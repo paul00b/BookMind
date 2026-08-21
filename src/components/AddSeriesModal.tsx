@@ -34,11 +34,12 @@ const EMPTY: SeriesFormData = {
 interface Props {
   prefill?: Partial<SeriesFormData>;
   onClose: () => void;
+  rootClassName?: string;
 }
 
 const readonlyInput = 'input bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500 pointer-events-none';
 
-export default function AddSeriesModal({ prefill, onClose }: Props) {
+export default function AddSeriesModal({ prefill, onClose, rootClassName }: Props) {
   const { addSeries, series: allSeries } = useSeries();
   const { t } = useTranslation();
   const isFromSearch = !!prefill;
@@ -101,6 +102,7 @@ export default function AddSeriesModal({ prefill, onClose }: Props) {
   return (
     <SheetModal
       onClose={onClose}
+      rootClassName={rootClassName}
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={

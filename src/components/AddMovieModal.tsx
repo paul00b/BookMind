@@ -33,9 +33,10 @@ const EMPTY: MovieFormData = {
 interface Props {
   prefill?: Partial<MovieFormData>;
   onClose: () => void;
+  rootClassName?: string;
 }
 
-export default function AddMovieModal({ prefill, onClose }: Props) {
+export default function AddMovieModal({ prefill, onClose, rootClassName }: Props) {
   const { addMovie, movies } = useMovies();
   const { t, i18n } = useTranslation();
   const [form, setForm] = useState<MovieFormData>({ ...EMPTY, ...prefill });
@@ -159,6 +160,7 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
       <>
       <SheetModal
         onClose={onClose}
+        rootClassName={rootClassName}
         panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
         scrollable
       >
@@ -309,6 +311,7 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
   return (
     <SheetModal
       onClose={onClose}
+      rootClassName={rootClassName}
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={
