@@ -134,6 +134,7 @@ export default function MovieHome() {
   const [prefill, setPrefill] = useState<ReturnType<typeof extractMovieData> | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [selectingId, setSelectingId] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchSectionRef = useRef<HTMLDivElement>(null);
@@ -236,8 +237,11 @@ export default function MovieHome() {
   }, [handleCloseSearch, dropdownOpen, query]);
 
   const handleSelectMovie = async (tmdbMovie: TmdbMovie) => {
+    if (selectingId != null) return; // avoid piling up requests on repeat taps
+    setSelectingId(tmdbMovie.id);
     // Fetch full details (includes credits/director)
     const details = await fetchMovieDetails(tmdbMovie.id);
+    setSelectingId(null);
     const data = extractMovieData(details ?? tmdbMovie);
     setPrefill(data);
     setModalOpen(true);
@@ -334,7 +338,8 @@ export default function MovieHome() {
                       {idx > 0 && <div className="border-t border-black/[0.06] dark:border-white/[0.06] mx-3" />}
                       <button
                         onClick={() => handleSelectMovie(movie)}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors text-left"
+                        disabled={selectingId != null}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors text-left disabled:opacity-60"
                       >
                         <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
                           {posterUrl ? (
@@ -351,7 +356,9 @@ export default function MovieHome() {
                             {movie.release_date?.slice(0, 4) || '—'}
                           </p>
                         </div>
-                        {alreadyAdded && (
+                        {selectingId === movie.id ? (
+                          <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin flex-shrink-0" />
+                        ) : alreadyAdded && (
                           <span className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
                             <CheckCircle2 size={12} />
                             {t('movieHome.inWatchlist')}

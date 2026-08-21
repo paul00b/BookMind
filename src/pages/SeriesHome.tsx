@@ -213,6 +213,7 @@ export default function SeriesHome() {
   const [modalOpen, setModalOpen] = useState(false);
   const [ratingsTarget, setRatingsTarget] = useState<TmdbSeries | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<Series | null>(null);
+  const [selectingId, setSelectingId] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [mobileDropdownStyle, setMobileDropdownStyle] = useState<CSSProperties>({});
@@ -304,7 +305,10 @@ export default function SeriesHome() {
   }, [handleCloseSearch, dropdownOpen, query]);
 
   const handleSelectSeries = async (tmdbSeries: TmdbSeries) => {
+    if (selectingId != null) return; // avoid piling up requests on repeat taps
+    setSelectingId(tmdbSeries.id);
     const details = await fetchSeriesDetails(tmdbSeries.id);
+    setSelectingId(null);
     const data = extractSeriesData(details ?? tmdbSeries);
     setPrefill(data);
     setModalOpen(true);
@@ -396,7 +400,8 @@ export default function SeriesHome() {
                       <div className="flex items-center hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors">
                         <button
                           onClick={() => handleSelectSeries(s)}
-                          className="flex-1 flex items-center gap-3 px-4 py-3 text-left min-w-0"
+                          disabled={selectingId != null}
+                          className="flex-1 flex items-center gap-3 px-4 py-3 text-left min-w-0 disabled:opacity-60"
                         >
                           <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
                             {posterUrl ? (
@@ -413,7 +418,9 @@ export default function SeriesHome() {
                               {s.first_air_date?.slice(0, 4) || '—'}
                             </p>
                           </div>
-                          {alreadyAdded && (
+                          {selectingId === s.id ? (
+                            <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin flex-shrink-0" />
+                          ) : alreadyAdded && (
                             <span className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
                               <CheckCircle2 size={12} />
                               {t('seriesHome.inList')}
@@ -422,7 +429,8 @@ export default function SeriesHome() {
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setDropdownOpen(false); setRatingsTarget(s); }}
-                          className="flex-shrink-0 mr-3 p-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors"
+                          disabled={selectingId != null}
+                          className="flex-shrink-0 mr-3 p-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors disabled:opacity-60"
                           title={t('seriesDetail.viewImdbRatings')}
                         >
                           <Eye size={17} />

@@ -152,7 +152,7 @@ export default function SheetModal({
 
         <div
           ref={panelRef}
-          className={`relative z-10 w-full ${scrollable && showHandle ? 'flex flex-col' : ''} ${panelClassName}`}
+          className={`relative z-10 w-full overflow-hidden ${scrollable && showHandle ? 'flex flex-col' : ''} ${panelClassName}`}
           style={{
             transform: dragOffset > 0 ? `translateY(${dragOffset}px)` : undefined,
             transition: isDragging ? 'none' : `transform ${CLOSE_ANIMATION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
