@@ -156,7 +156,9 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                   {localMovie.status === 'watched' ? t('movieDetail.watched') : t('movieDetail.wantToWatch')}
                 </span>
                 {imdbLoading ? (
-                  <span className="w-11 h-6 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse font-bold text-transparent">
+                    0.0
+                  </span>
                 ) : imdbRating != null && (
                   imdbId ? (
                     <a
