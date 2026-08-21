@@ -138,10 +138,6 @@ export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [mobileDropdownStyle, setMobileDropdownStyle] = useState<CSSProperties>({});
-  const dismissMobileKeyboard = useCallback(() => {
-    if (window.innerWidth >= 768) return;
-    if (document.activeElement === inputRef.current) inputRef.current?.blur();
-  }, []);
   const updateMobileDropdownLayout = useCallback(() => {
     if (window.innerWidth >= 768 || !dropdownRef.current || !inputRef.current) {
       setMobileDropdownStyle({});
@@ -291,8 +287,6 @@ export default function Home() {
           <div
             className="absolute top-full mt-2 left-0 right-0 card shadow-xl z-40 overflow-y-auto overscroll-contain animate-slide-up max-h-[calc(100svh-16rem-env(safe-area-inset-bottom))] md:max-h-[60vh]"
             style={mobileDropdownStyle}
-            onScroll={dismissMobileKeyboard}
-            onWheel={dismissMobileKeyboard}
           >
             {searching ? (
               <div className="p-3 space-y-2">
