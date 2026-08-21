@@ -56,15 +56,20 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   }, [movie.tmdb_id]);
 
   useEffect(() => {
+    // IMDb mostly indexes original-language titles — wait for the TMDB details fetch
+    // (which carries original_title) before searching, rather than searching on a
+    // possibly-translated title and finding nothing.
+    if (movie.tmdb_id && !tmdbMovie) return;
     let active = true;
+    const title = tmdbMovie?.original_title || movie.title;
     const year = movie.release_date ? Number(movie.release_date.slice(0, 4)) : null;
-    fetchMovieImdbRating(movie.title, year).then(result => {
+    fetchMovieImdbRating(title, year).then(result => {
       if (!active) return;
       setImdbRating(result?.rating ?? null);
       setImdbId(result?.imdbId ?? null);
     });
     return () => { active = false; };
-  }, [movie.title, movie.release_date]);
+  }, [movie.tmdb_id, tmdbMovie, movie.title, movie.release_date]);
 
   const cast = (tmdbMovie?.credits?.cast ?? []).slice(0, 12);
 

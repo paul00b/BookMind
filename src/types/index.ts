@@ -62,6 +62,7 @@ export interface Movie {
 export interface TmdbMovie {
   id: number;
   title: string;
+  original_title?: string;
   overview: string;
   poster_path: string | null;
   release_date: string;
