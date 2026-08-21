@@ -33,10 +33,14 @@ const EMPTY: MovieFormData = {
 interface Props {
   prefill?: Partial<MovieFormData>;
   onClose: () => void;
-  rootClassName?: string;
+  /** z-index override for this sheet — set when opened from a nested stack
+   * (e.g. an actor sheet's filmography) so it stacks above its opener. */
+  zIndex?: number;
+  /** z-index base to hand to the cast's ActorSheet, so it stacks above this sheet. */
+  actorZIndexBase?: number;
 }
 
-export default function AddMovieModal({ prefill, onClose, rootClassName }: Props) {
+export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBase = 70 }: Props) {
   const { addMovie, movies } = useMovies();
   const { t, i18n } = useTranslation();
   const [form, setForm] = useState<MovieFormData>({ ...EMPTY, ...prefill });
@@ -160,7 +164,7 @@ export default function AddMovieModal({ prefill, onClose, rootClassName }: Props
       <>
       <SheetModal
         onClose={onClose}
-        rootClassName={rootClassName}
+        zIndex={zIndex}
         panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
         scrollable
       >
@@ -301,7 +305,7 @@ export default function AddMovieModal({ prefill, onClose, rootClassName }: Props
       </SheetModal>
 
       {selectedActorId != null && (
-        <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} />
+        <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} zIndexBase={actorZIndexBase} />
       )}
       </>
     );
@@ -311,7 +315,7 @@ export default function AddMovieModal({ prefill, onClose, rootClassName }: Props
   return (
     <SheetModal
       onClose={onClose}
-      rootClassName={rootClassName}
+      zIndex={zIndex}
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={

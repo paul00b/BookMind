@@ -13,9 +13,13 @@ type Credit = NonNullable<NonNullable<TmdbPerson['combined_credits']>['cast']>[n
 interface Props {
   personId: number;
   onClose: () => void;
+  /** z-index tier for this sheet — bumped by callers that are themselves stacked
+   * above the default tier, so actor sheet -> filmography -> actor sheet -> ...
+   * keeps stacking correctly instead of colliding on a fixed z-index. */
+  zIndexBase?: number;
 }
 
-export default function ActorSheet({ personId, onClose }: Props) {
+export default function ActorSheet({ personId, onClose, zIndexBase = 70 }: Props) {
   const { t, i18n } = useTranslation();
   const [person, setPerson] = useState<TmdbPerson | null>(null);
   const [selectingCreditId, setSelectingCreditId] = useState<number | null>(null);
@@ -56,7 +60,7 @@ export default function ActorSheet({ personId, onClose }: Props) {
     <>
     <SheetModal
       onClose={onClose}
-      rootClassName="z-[70]"
+      zIndex={zIndexBase}
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[85dvh] flex flex-col overflow-hidden"
     >
       <SheetCloseButton className="absolute top-4 right-4 btn-ghost p-2 z-10">
@@ -134,10 +138,19 @@ export default function ActorSheet({ personId, onClose }: Props) {
     </SheetModal>
 
     {moviePrefill && (
-      <AddMovieModal prefill={moviePrefill} onClose={() => setMoviePrefill(null)} rootClassName="z-[80]" />
+      <AddMovieModal
+        prefill={moviePrefill}
+        onClose={() => setMoviePrefill(null)}
+        zIndex={zIndexBase + 10}
+        actorZIndexBase={zIndexBase + 20}
+      />
     )}
     {seriesPrefill && (
-      <AddSeriesModal prefill={seriesPrefill} onClose={() => setSeriesPrefill(null)} rootClassName="z-[80]" />
+      <AddSeriesModal
+        prefill={seriesPrefill}
+        onClose={() => setSeriesPrefill(null)}
+        zIndex={zIndexBase + 10}
+      />
     )}
     </>
   );

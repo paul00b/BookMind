@@ -6,6 +6,10 @@ interface SheetModalProps {
   panelClassName: string;
   overlayClassName?: string;
   rootClassName?: string;
+  /** Overrides rootClassName's z-index via inline style — use for dynamically
+   * nested stacks (e.g. actor sheet -> filmography -> actor sheet -> ...) where
+   * the tier isn't known ahead of time, so it can't be a static Tailwind class. */
+  zIndex?: number;
   showHandle?: boolean;
   scrollable?: boolean;
   header?: ReactNode;
@@ -54,6 +58,7 @@ export default function SheetModal({
   panelClassName,
   overlayClassName = 'bg-black/50 backdrop-blur-sm animate-fade-in',
   rootClassName = 'z-50',
+  zIndex,
   showHandle = true,
   scrollable = false,
   header,
@@ -142,7 +147,10 @@ export default function SheetModal({
 
   return (
     <SheetCloseContext.Provider value={requestClose}>
-      <div className={`fixed inset-0 flex items-end md:items-center justify-center p-0 md:p-4 ${rootClassName}`}>
+      <div
+        className={`fixed inset-0 flex items-end md:items-center justify-center p-0 md:p-4 ${rootClassName}`}
+        style={zIndex != null ? { zIndex } : undefined}
+      >
         <button
           type="button"
           className={`absolute inset-0 ${overlayClassName}`}

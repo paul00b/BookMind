@@ -34,12 +34,14 @@ const EMPTY: SeriesFormData = {
 interface Props {
   prefill?: Partial<SeriesFormData>;
   onClose: () => void;
-  rootClassName?: string;
+  /** z-index override for this sheet — set when opened from a nested stack
+   * (e.g. an actor sheet's filmography) so it stacks above its opener. */
+  zIndex?: number;
 }
 
 const readonlyInput = 'input bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500 pointer-events-none';
 
-export default function AddSeriesModal({ prefill, onClose, rootClassName }: Props) {
+export default function AddSeriesModal({ prefill, onClose, zIndex }: Props) {
   const { addSeries, series: allSeries } = useSeries();
   const { t } = useTranslation();
   const isFromSearch = !!prefill;
@@ -102,7 +104,7 @@ export default function AddSeriesModal({ prefill, onClose, rootClassName }: Prop
   return (
     <SheetModal
       onClose={onClose}
-      rootClassName={rootClassName}
+      zIndex={zIndex}
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={
