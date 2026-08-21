@@ -39,6 +39,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [imdbRating, setImdbRating] = useState<number | null>(null);
   const [imdbId, setImdbId] = useState<string | null>(null);
+  const [imdbLoading, setImdbLoading] = useState(true);
 
   useEffect(() => {
     if (!movie.tmdb_id) return;
@@ -67,6 +68,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
       if (!active) return;
       setImdbRating(result?.rating ?? null);
       setImdbId(result?.imdbId ?? null);
+      setImdbLoading(false);
     });
     return () => { active = false; };
   }, [movie.tmdb_id, tmdbMovie, movie.title, movie.release_date]);
@@ -153,7 +155,9 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                 }`}>
                   {localMovie.status === 'watched' ? t('movieDetail.watched') : t('movieDetail.wantToWatch')}
                 </span>
-                {imdbRating != null && (
+                {imdbLoading ? (
+                  <span className="w-11 h-6 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                ) : imdbRating != null && (
                   imdbId ? (
                     <a
                       href={`https://www.imdb.com/title/${imdbId}/`}
