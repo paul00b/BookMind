@@ -162,11 +162,11 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                       className="px-3 py-1 rounded-full font-bold hover:opacity-80 transition-opacity"
                       style={getRatingStyle(imdbRating)}
                     >
-                      IMDb {imdbRating.toFixed(1)}
+                      {imdbRating.toFixed(1)}
                     </a>
                   ) : (
                     <span className="px-3 py-1 rounded-full font-bold" style={getRatingStyle(imdbRating)}>
-                      IMDb {imdbRating.toFixed(1)}
+                      {imdbRating.toFixed(1)}
                     </span>
                   )
                 )}
