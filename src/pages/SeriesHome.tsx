@@ -371,7 +371,6 @@ export default function SeriesHome() {
             className="absolute top-full mt-2 left-0 right-0 card shadow-xl z-40 overflow-y-auto overscroll-contain animate-slide-up max-h-[calc(100svh-16rem-env(safe-area-inset-bottom))] md:max-h-[60vh]"
             style={mobileDropdownStyle}
             onScroll={dismissMobileKeyboard}
-            onTouchMove={dismissMobileKeyboard}
             onWheel={dismissMobileKeyboard}
           >
             {searching ? (
