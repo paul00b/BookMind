@@ -34,7 +34,7 @@ function WantToWatchSlider({ onSelect }: { onSelect: (s: Series) => void }) {
   if (wantToWatch.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl mt-10">
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <Bookmark size={14} />
         {t('seriesHome.wantToWatch')}
@@ -95,7 +95,7 @@ function WatchingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
   if (activeWatching.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl mt-10">
       <h2 className="text-sm font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <Play size={14} />
         {t('seriesHome.watching')}
@@ -133,7 +133,7 @@ function WaitingSlider({ onSelect }: { onSelect: (s: Series) => void }) {
   if (waitingNextSeason.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl mt-10">
       <h2 className="text-sm font-semibold text-purple-500 dark:text-purple-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <Clock size={14} />
         {t('seriesHome.waitingNextSeason')}
@@ -162,7 +162,7 @@ function LastWatchedSlider({ onSelect }: { onSelect: (s: Series) => void }) {
   if (lastWatched.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl mt-10">
       <h2 className="text-sm font-semibold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <CheckCheck size={14} />
         {t('seriesHome.lastWatched')}

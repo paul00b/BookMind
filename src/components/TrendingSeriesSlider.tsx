@@ -105,7 +105,7 @@ export default function TrendingSeriesSlider({ onSelect }: TrendingSeriesSliderP
   ];
 
   return (
-    <div className="w-full max-w-xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl mt-10">
       {/* Header */}
       <h2 className="text-sm font-semibold text-amber-500 dark:text-amber-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <Flame size={14} />
