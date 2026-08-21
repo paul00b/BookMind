@@ -84,7 +84,7 @@ export default function SearchSectionStack({ items }: Props) {
     }, [itemsKey]);
 
     return (
-        <div className="w-full max-w-xl md:max-w-3xl">
+        <div className="w-full max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl">
             {items.map(item => (
                 <div
                     key={item.id}

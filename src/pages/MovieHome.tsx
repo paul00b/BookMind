@@ -31,7 +31,7 @@ function WantToWatchSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
   if (wantToWatch.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl md:max-w-3xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mt-10">
       <h2 className="text-sm font-semibold text-amber-500 dark:text-amber-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <Bookmark size={14} />
         {t('movieHome.wantToWatch')}
@@ -78,7 +78,7 @@ function LastWatchedSlider({ onSelect }: { onSelect: (movie: Movie) => void }) {
   if (lastWatched.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl md:max-w-3xl mt-10">
+    <div className="w-full max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mt-10">
       <h2 className="text-sm font-semibold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
         <CheckCheck size={14} />
         {t('movieHome.lastWatched')}
