@@ -30,7 +30,7 @@ function WantToReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
   if (wantToRead.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mt-10">
+    <div className="w-full max-w-6xl mt-10">
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-1">
         {t('home.wantToRead')}
       </h2>
@@ -77,7 +77,7 @@ function LastReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
   if (lastRead.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mt-10">
+    <div className="w-full max-w-6xl mt-10">
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-1">
         {t('home.lastRead')}
       </h2>
