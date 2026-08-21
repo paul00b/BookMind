@@ -22,7 +22,7 @@ interface Props {
 export default function MovieDetailModal({ movie, onClose }: Props) {
   const { updateMovie, deleteMovie } = useMovies();
   const { movieCategories, addMoviesToCategory, removeMovieFromCategory } = useMovieCategories();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [editingDate, setEditingDate] = useState(false);
   const [watchedDate, setWatchedDate] = useState(movie.watched_date || '');
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -132,7 +132,10 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                 </span>
                 {localMovie.release_date && (
                   <span className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full">
-                    {localMovie.release_date.slice(0, 4)}
+                    {new Date(localMovie.release_date).toLocaleDateString(
+                      i18n.language.startsWith('fr') ? 'fr-FR' : 'en-US',
+                      { day: 'numeric', month: 'long', year: 'numeric' }
+                    )}
                   </span>
                 )}
                 {localMovie.runtime && (
