@@ -355,6 +355,13 @@ const fr = {
     collections: 'Collections',
     cast: 'Distribution',
   },
+  actorSheet: {
+    born: 'Né(e) le {{date}}',
+    diedOn: 'Décédé(e) le {{date}}',
+    birthplace: 'à {{place}}',
+    noBiography: 'Aucune biographie disponible.',
+    filmography: 'Filmographie',
+  },
   movieCard: {
     watched: 'Vu',
     wantToWatch: 'À voir',

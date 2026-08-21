@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import type { TmdbEpisode, TmdbSeries } from '../types';
 import { useTranslation } from 'react-i18next';
 import SheetModal, { SheetCloseButton } from './SheetModal';
+import ActorSheet from './ActorSheet';
 
 interface SeriesPreviewSheetProps {
   isOpen: boolean;
@@ -189,6 +190,7 @@ export default function SeriesPreviewSheet({
   const loadedSeasonsRef = useRef<Set<number>>(new Set());
   const [tmdbSeries, setTmdbSeries] = useState<TmdbSeries | null>(null);
   const [castSectionOpen, setCastSectionOpen] = useState(false);
+  const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!descRef.current) return;
@@ -440,7 +442,12 @@ export default function SeriesPreviewSheet({
                     {cast.map(person => {
                       const photoUrl = getPosterUrl(person.profile_path ?? null);
                       return (
-                        <div key={person.id} className="w-24 flex-shrink-0">
+                        <button
+                          type="button"
+                          key={person.id}
+                          onClick={() => setSelectedActorId(person.id)}
+                          className="w-24 flex-shrink-0 text-left"
+                        >
                           <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                             {photoUrl ? (
                               <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
@@ -454,7 +461,7 @@ export default function SeriesPreviewSheet({
                           {person.character && (
                             <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400 leading-tight line-clamp-2">{person.character}</p>
                           )}
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -767,6 +774,10 @@ export default function SeriesPreviewSheet({
 
       {selectedEpisode && (
         <EpisodeDetailSheet info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
+      )}
+
+      {selectedActorId != null && (
+        <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} />
       )}
     </>
   );

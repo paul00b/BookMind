@@ -355,6 +355,13 @@ const en = {
     collections: 'Collections',
     cast: 'Cast',
   },
+  actorSheet: {
+    born: 'Born {{date}}',
+    diedOn: 'Died {{date}}',
+    birthplace: 'in {{place}}',
+    noBiography: 'No biography available.',
+    filmography: 'Filmography',
+  },
   movieCard: {
     watched: 'Watched',
     wantToWatch: 'Want to watch',

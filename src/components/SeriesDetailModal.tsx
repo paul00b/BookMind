@@ -7,6 +7,7 @@ import SeasonGrid, { deriveSeriesStatus } from './SeasonGrid';
 import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
 import EditableNote from './EditableNote';
+import ActorSheet from './ActorSheet';
 import { fetchSeasonDetails, fetchSeriesDetails, fetchSeriesWatchProviders, fetchTrailerKey, extractSeriesData, getPosterUrl } from '../lib/tmdb';
 import type { WatchProvidersResult } from '../types';
 import WatchProviders from './WatchProviders';
@@ -207,6 +208,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
   const [tmdbEpisodes, setTmdbEpisodes] = useState<Record<number, TmdbEpisode[]>>({});
   const [loadingTmdbSeason, setLoadingTmdbSeason] = useState<number | null>(null);
   const [selectedEpisode, setSelectedEpisode] = useState<SelectedEpisodeInfo | null>(null);
+  const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
   const loadedSeasonsRef = useRef<Set<number>>(new Set());
 
   const handleRatingChange = async (rating: number) => {
@@ -415,7 +417,12 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                     {cast.map(person => {
                       const photoUrl = getPosterUrl(person.profile_path ?? null);
                       return (
-                        <div key={person.id} className="w-24 flex-shrink-0">
+                        <button
+                          type="button"
+                          key={person.id}
+                          onClick={() => setSelectedActorId(person.id)}
+                          className="w-24 flex-shrink-0 text-left"
+                        >
                           <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                             {photoUrl ? (
                               <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
@@ -429,7 +436,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                           {person.character && (
                             <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400 leading-tight line-clamp-2">{person.character}</p>
                           )}
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -736,6 +743,10 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
 
     {selectedEpisode && (
       <EpisodeDetailSheet info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
+    )}
+
+    {selectedActorId != null && (
+      <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} />
     )}
     </>
   );

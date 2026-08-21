@@ -6,6 +6,7 @@ import StarRating from './StarRating';
 import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
 import EditableNote from './EditableNote';
+import ActorSheet from './ActorSheet';
 import { fetchMovieDetails, fetchMovieWatchProviders, fetchTrailerKey, getPosterUrl } from '../lib/tmdb';
 import type { WatchProvidersResult } from '../types';
 import WatchProviders from './WatchProviders';
@@ -31,6 +32,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   const [watchProviders, setWatchProviders] = useState<WatchProvidersResult | null>(null);
   const [loadingProviders, setLoadingProviders] = useState(true);
   const [castOpen, setCastOpen] = useState(false);
+  const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
   const [trailerLoading, setTrailerLoading] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
@@ -87,6 +89,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   };
 
   return (
+    <>
     <SheetModal
       onClose={onClose}
       panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[90dvh]"
@@ -242,7 +245,12 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                       {cast.map(person => {
                         const photoUrl = getPosterUrl(person.profile_path ?? null);
                         return (
-                          <div key={person.id} className="w-24 flex-shrink-0">
+                          <button
+                            type="button"
+                            key={person.id}
+                            onClick={() => setSelectedActorId(person.id)}
+                            className="w-24 flex-shrink-0 text-left"
+                          >
                             <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                               {photoUrl ? (
                                 <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
@@ -256,7 +264,7 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                             {person.character && (
                               <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400 leading-tight line-clamp-2">{person.character}</p>
                             )}
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
@@ -322,5 +330,10 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
           </div>
         </div>
     </SheetModal>
+
+    {selectedActorId != null && (
+      <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} />
+    )}
+    </>
   );
 }

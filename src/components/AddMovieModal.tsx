@@ -7,6 +7,7 @@ import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
 import { fetchMovieDetails, getPosterUrl } from '../lib/tmdb';
 import { useTranslation } from 'react-i18next';
+import ActorSheet from './ActorSheet';
 
 const normalize = (s: string) => s.toLowerCase().trim().replace(/\s+/g, ' ');
 
@@ -36,12 +37,13 @@ interface Props {
 
 export default function AddMovieModal({ prefill, onClose }: Props) {
   const { addMovie, movies } = useMovies();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [form, setForm] = useState<MovieFormData>({ ...EMPTY, ...prefill });
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [tmdbMovie, setTmdbMovie] = useState<TmdbMovie | null>(null);
   const [castOpen, setCastOpen] = useState(false);
+  const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
   const isFromSearch = !!prefill;
 
   useEffect(() => {
@@ -154,6 +156,7 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
   /* ── Preview mode (from search, not editing) ── */
   if (isFromSearch && !editing) {
     return (
+      <>
       <SheetModal
         onClose={onClose}
         panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
@@ -200,7 +203,10 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
                 </span>
                 {form.release_date && (
                   <span className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full">
-                    {form.release_date.slice(0, 4)}
+                    {new Date(form.release_date).toLocaleDateString(
+                      i18n.language.startsWith('fr') ? 'fr-FR' : 'en-US',
+                      { day: 'numeric', month: 'long', year: 'numeric' }
+                    )}
                   </span>
                 )}
                 {form.runtime && (
@@ -242,7 +248,12 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
                       {cast.map(person => {
                         const photoUrl = getPosterUrl(person.profile_path ?? null);
                         return (
-                          <div key={person.id} className="w-24 flex-shrink-0">
+                          <button
+                            type="button"
+                            key={person.id}
+                            onClick={() => setSelectedActorId(person.id)}
+                            className="w-24 flex-shrink-0 text-left"
+                          >
                             <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                               {photoUrl ? (
                                 <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
@@ -256,7 +267,7 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
                             {person.character && (
                               <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400 leading-tight line-clamp-2">{person.character}</p>
                             )}
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
@@ -286,6 +297,11 @@ export default function AddMovieModal({ prefill, onClose }: Props) {
           </div>
         </div>
       </SheetModal>
+
+      {selectedActorId != null && (
+        <ActorSheet key={selectedActorId} personId={selectedActorId} onClose={() => setSelectedActorId(null)} />
+      )}
+      </>
     );
   }
 

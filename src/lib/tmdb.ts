@@ -1,4 +1,4 @@
-import type { TmdbMovie, TmdbSeries, TmdbSeasonDetails, WatchProvider, WatchProvidersResult } from '../types';
+import type { TmdbMovie, TmdbSeries, TmdbSeasonDetails, TmdbPerson, WatchProvider, WatchProvidersResult } from '../types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
@@ -110,6 +110,18 @@ export async function fetchMovieDetails(tmdbId: number): Promise<TmdbMovie | nul
   try {
     const res = await fetch(
       buildUrl(`/movie/${tmdbId}`, { append_to_response: 'credits', language: getTmdbLocale() })
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchPersonDetails(personId: number): Promise<TmdbPerson | null> {
+  try {
+    const res = await fetch(
+      buildUrl(`/person/${personId}`, { append_to_response: 'combined_credits', language: getTmdbLocale() })
     );
     if (!res.ok) return null;
     return await res.json();

@@ -145,6 +145,19 @@ export interface TmdbSeries {
   };
 }
 
+export interface TmdbPerson {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  place_of_birth: string | null;
+  profile_path: string | null;
+  combined_credits?: {
+    cast?: { id: number; title?: string; name?: string; character?: string; poster_path?: string | null; media_type: 'movie' | 'tv' }[];
+  };
+}
+
 export interface SeriesCategory {
   id: string;
   user_id: string;
