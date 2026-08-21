@@ -17,6 +17,13 @@ export default function SearchSectionStack({ items }: Props) {
     const previousPositionsRef = useRef(new Map<string, number>());
     const [contentHeights, setContentHeights] = useState<Record<string, number>>({});
 
+    // ponytail: callers rebuild `items` (new array/objects) on every render, even when
+    // order/visibility didn't change. Key off id+visible so the observer/FLIP effects
+    // below only redo work when something actually moved — otherwise every unrelated
+    // parent re-render (e.g. clicking a card) re-triggers layout reads and a spurious
+    // "jump" animation.
+    const itemsKey = items.map(i => `${i.id}:${i.visible}`).join('|');
+
     // 1. Utilisation de ResizeObserver pour mesurer les hauteurs sans bloquer le rendu
     useEffect(() => {
         const observers: ResizeObserver[] = [];
@@ -40,7 +47,8 @@ export default function SearchSectionStack({ items }: Props) {
         });
 
         return () => observers.forEach((obs) => obs.disconnect());
-    }, [items]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemsKey]);
 
     // 2. Animation FLIP pour les changements de position (inchangée mais avec guard)
     useLayoutEffect(() => {
@@ -72,7 +80,8 @@ export default function SearchSectionStack({ items }: Props) {
         });
 
         previousPositionsRef.current = nextPositions;
-    }, [items]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemsKey]);
 
     return (
         <div className="w-full max-w-xl">
