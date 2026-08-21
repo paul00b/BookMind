@@ -7,6 +7,8 @@ import SheetModal, { SheetCloseButton } from './SheetModal';
 import ExpandableDescription from './ExpandableDescription';
 import EditableNote from './EditableNote';
 import ActorSheet from './ActorSheet';
+import { fetchMovieImdbRating } from '../lib/imdb';
+import { getRatingStyle } from '../lib/imdbRatingStyle';
 import { fetchMovieDetails, fetchMovieWatchProviders, fetchTrailerKey, getPosterUrl } from '../lib/tmdb';
 import type { WatchProvidersResult } from '../types';
 import WatchProviders from './WatchProviders';
@@ -35,6 +37,8 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
   const [selectedActorId, setSelectedActorId] = useState<number | null>(null);
   const [trailerLoading, setTrailerLoading] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [imdbRating, setImdbRating] = useState<number | null>(null);
+  const [imdbId, setImdbId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!movie.tmdb_id) return;
@@ -50,6 +54,17 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
     });
     return () => { active = false; };
   }, [movie.tmdb_id]);
+
+  useEffect(() => {
+    let active = true;
+    const year = movie.release_date ? Number(movie.release_date.slice(0, 4)) : null;
+    fetchMovieImdbRating(movie.title, year).then(result => {
+      if (!active) return;
+      setImdbRating(result?.rating ?? null);
+      setImdbId(result?.imdbId ?? null);
+    });
+    return () => { active = false; };
+  }, [movie.title, movie.release_date]);
 
   const cast = (tmdbMovie?.credits?.cast ?? []).slice(0, 12);
 
@@ -133,6 +148,23 @@ export default function MovieDetailModal({ movie, onClose }: Props) {
                 }`}>
                   {localMovie.status === 'watched' ? t('movieDetail.watched') : t('movieDetail.wantToWatch')}
                 </span>
+                {imdbRating != null && (
+                  imdbId ? (
+                    <a
+                      href={`https://www.imdb.com/title/${imdbId}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1 rounded-full font-bold hover:opacity-80 transition-opacity"
+                      style={getRatingStyle(imdbRating)}
+                    >
+                      IMDb {imdbRating.toFixed(1)}
+                    </a>
+                  ) : (
+                    <span className="px-3 py-1 rounded-full font-bold" style={getRatingStyle(imdbRating)}>
+                      IMDb {imdbRating.toFixed(1)}
+                    </span>
+                  )
+                )}
                 {localMovie.release_date && (
                   <span className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full">
                     {new Date(localMovie.release_date).toLocaleDateString(

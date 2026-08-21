@@ -202,3 +202,55 @@ export async function fetchSeasonRatings(
   if (!all) return null;
   return all[season] ?? null;
 }
+
+export interface MovieImdbRating {
+  imdbId: string;
+  rating: number | null;
+}
+
+/** Cherche la note IMDB d'un film via l'API suggestion (recherche de l'ID) puis le GraphQL (note). */
+export async function fetchMovieImdbRating(title: string, year?: number | null): Promise<MovieImdbRating | null> {
+  const normalizedTitle = title.trim().toLowerCase();
+  if (!normalizedTitle) return null;
+  const cacheKey = `nookmind_imdb_movie_${encodeURIComponent(normalizedTitle)}_${year ?? ''}`;
+  const cached = getSessionCache<MovieImdbRating | null>(cacheKey);
+  if (cached !== null) return cached;
+
+  const result = await (async (): Promise<MovieImdbRating | null> => {
+    const firstChar = encodeURIComponent(normalizedTitle[0]);
+    const query = encodeURIComponent(normalizedTitle);
+    const suggestRes = await doFetch(`${IMDB_SUGGEST}?firstChar=${firstChar}&query=${query}`);
+    if (!suggestRes) return null;
+
+    let imdbId: string | undefined;
+    try {
+      const data = await suggestRes.json();
+      const candidates = (data.d as Array<{ id: string; q?: string; y?: number }> | undefined)
+        ?.filter(item => item.q === 'feature' || item.q === 'TV movie') ?? [];
+      imdbId = (year ? candidates.find(c => c.y === year) : undefined)?.id ?? candidates[0]?.id;
+    } catch {
+      return null;
+    }
+    if (!imdbId) return null;
+
+    const ratingRes = await doFetch(IMDB_GRAPHQL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        query: `query MovieRating($id: ID!) { title(id: $id) { ratingsSummary { aggregateRating } } }`,
+        variables: { id: imdbId },
+      }),
+    });
+    if (!ratingRes) return { imdbId, rating: null };
+    try {
+      const data = await ratingRes.json();
+      if (data.errors?.length) return { imdbId, rating: null };
+      return { imdbId, rating: data?.data?.title?.ratingsSummary?.aggregateRating ?? null };
+    } catch {
+      return { imdbId, rating: null };
+    }
+  })();
+
+  setSessionCache(cacheKey, result);
+  return result;
+}
