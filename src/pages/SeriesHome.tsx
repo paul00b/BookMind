@@ -308,7 +308,19 @@ export default function SeriesHome() {
     return () => document.removeEventListener('mousedown', handler);
   }, [handleCloseSearch, dropdownOpen, query]);
 
+  const findExistingSeries = (tmdbSeries: TmdbSeries) =>
+    allSeries.find(
+      existing => existing.tmdb_id === tmdbSeries.id || normalize(existing.title) === normalize(tmdbSeries.name)
+    );
+
   const handleSelectSeries = async (tmdbSeries: TmdbSeries) => {
+    const existing = findExistingSeries(tmdbSeries);
+    if (existing) {
+      setSelectedSeries(existing);
+      setDropdownOpen(false);
+      setQuery('');
+      return;
+    }
     if (selectingId != null) return; // avoid piling up requests on repeat taps
     setSelectingId(tmdbSeries.id);
     const details = await fetchSeriesDetails(tmdbSeries.id);
@@ -396,9 +408,7 @@ export default function SeriesHome() {
               <ul>
                 {results.map((s, idx) => {
                   const posterUrl = getPosterUrl(s.poster_path);
-                  const alreadyAdded = allSeries.some(
-                    existing => normalize(existing.title) === normalize(s.name)
-                  );
+                  const alreadyAdded = !!findExistingSeries(s);
                   return (
                     <li key={s.id}>
                       {idx > 0 && <div className="border-t border-black/[0.06] dark:border-white/[0.06] mx-3" />}
