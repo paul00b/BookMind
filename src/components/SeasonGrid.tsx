@@ -280,12 +280,12 @@ export default function SeasonGrid({
     const empty = isSeasonEmpty(season);
     const isExpanded = expandedSeason === season;
     const base = compact
-      ? 'min-w-[3rem] px-3 py-1 text-xs rounded-xl font-medium whitespace-nowrap transition-all flex items-center justify-center shrink-0'
-      : 'min-w-[3.5rem] px-4 py-1.5 text-sm rounded-xl font-medium whitespace-nowrap transition-all flex items-center justify-center shrink-0';
+      ? 'min-w-12 px-3 py-1 text-xs rounded-xl font-medium whitespace-nowrap transition-all flex items-center justify-center shrink-0'
+      : 'min-w-14 px-4 py-1.5 text-sm rounded-xl font-medium whitespace-nowrap transition-all flex items-center justify-center shrink-0';
     const ring = isExpanded ? 'ring-2 ring-offset-1 ring-offset-white dark:ring-offset-gray-900' : '';
     if (empty) return `${base} bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 ${ring} ${isExpanded ? 'ring-gray-300' : ''}`;
-    if (watched) return `${base} bg-emerald-500 text-white shadow-sm ${ring} ${isExpanded ? 'ring-emerald-300' : ''}`;
-    if (partial) return `${base} bg-blue-400 text-white shadow-sm ${ring} ${isExpanded ? 'ring-blue-300' : ''}`;
+    if (watched) return `${base} bg-emerald-500 text-white shadow-xs ${ring} ${isExpanded ? 'ring-emerald-300' : ''}`;
+    if (partial) return `${base} bg-blue-400 text-white shadow-xs ${ring} ${isExpanded ? 'ring-blue-300' : ''}`;
     return `${base} bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 ${
       !readonly ? 'hover:bg-amber-500/20 hover:text-amber-600 dark:hover:text-amber-400' : ''
     } ${ring} ${isExpanded ? 'ring-amber-300' : ''}`;
@@ -309,14 +309,14 @@ export default function SeasonGrid({
           <button
             type="button"
             onClick={() => confirmFill(false)}
-            className="min-w-[3.5rem] rounded-full px-3 py-1.5 text-sm font-medium border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/50 text-gray-600 dark:text-gray-300 transition-colors hover:bg-white dark:hover:bg-gray-900 shrink-0"
+            className="min-w-14 rounded-full px-3 py-1.5 text-sm font-medium border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/50 text-gray-600 dark:text-gray-300 transition-colors hover:bg-white dark:hover:bg-gray-900 shrink-0"
           >
             {t('seriesDetail.no')}
           </button>
           <button
             type="button"
             onClick={() => confirmFill(true)}
-            className="min-w-[3.5rem] rounded-full px-3.5 py-1.5 text-sm font-semibold bg-amber-500 text-white shadow-sm transition-colors hover:bg-amber-600 shrink-0"
+            className="min-w-14 rounded-full px-3.5 py-1.5 text-sm font-semibold bg-amber-500 text-white shadow-xs transition-colors hover:bg-amber-600 shrink-0"
           >
             {t('seriesDetail.yes')}
           </button>

@@ -24,7 +24,7 @@ export default function InstallPromptSheet({ onDismiss }: Props) {
     <SheetModal
       onClose={onDismiss}
       rootClassName="z-50 md:hidden"
-      overlayClassName="bg-black/40 backdrop-blur-sm animate-fade-in"
+      overlayClassName="bg-black/40 backdrop-blur-xs animate-fade-in"
       panelClassName="bg-[#f8f6f1] dark:bg-[#1a1f2e] rounded-t-3xl shadow-2xl animate-slide-up px-6 pt-5 pb-8"
     >
         {/* Dismiss */}
@@ -117,7 +117,7 @@ export default function InstallPromptSheet({ onDismiss }: Props) {
 function Step({ number, children }: { number: number; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+      <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
         {number}
       </span>
       <div>{children}</div>

@@ -108,7 +108,7 @@ export default function AddSeriesModal({ prefill, onClose, zIndex }: Props) {
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={
-        <div className="flex items-center justify-between p-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
+        <div className="flex items-center justify-between p-6 pb-4 border-b border-black/6 dark:border-white/6">
           <h2 className="font-serif text-xl font-bold text-gray-900 dark:text-gray-100">{t('addSeries.title')}</h2>
           <SheetCloseButton className="btn-ghost p-2"><X size={18} /></SheetCloseButton>
         </div>
@@ -117,7 +117,7 @@ export default function AddSeriesModal({ prefill, onClose, zIndex }: Props) {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {form.poster_url && (
             <div className="flex justify-center mb-2">
-              <div className="w-20 aspect-[2/3] rounded-xl overflow-hidden shadow-md">
+              <div className="w-20 aspect-2/3 rounded-xl overflow-hidden shadow-md">
                 <img src={form.poster_url} alt="Poster" className="w-full h-full object-cover" />
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function AddSeriesModal({ prefill, onClose, zIndex }: Props) {
 
           {isDuplicate && (
             <div className="flex items-start gap-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl px-4 py-3">
-              <AlertTriangle size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
+              <AlertTriangle size={15} className="text-amber-500 shrink-0 mt-0.5" />
               <p className="text-sm text-amber-700 dark:text-amber-300">{t('addSeries.alreadyInList')}</p>
             </div>
           )}

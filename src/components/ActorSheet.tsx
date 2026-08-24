@@ -69,7 +69,7 @@ export default function ActorSheet({ personId, onClose, zIndexBase = 70 }: Props
 
       <div className="overflow-y-auto flex-1">
         <div className="flex items-start gap-4 p-6 pb-4">
-          <div className="w-20 aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+          <div className="w-20 aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
             {photoUrl ? (
               <img src={photoUrl} alt={person?.name} className="w-full h-full object-cover" />
             ) : (
@@ -115,9 +115,9 @@ export default function ActorSheet({ personId, onClose, zIndexBase = 70 }: Props
                     key={`${credit.media_type}-${credit.id}`}
                     onClick={() => handleSelectCredit(credit)}
                     disabled={selectingCreditId != null}
-                    className="w-20 flex-shrink-0 text-left disabled:opacity-60"
+                    className="w-20 shrink-0 text-left disabled:opacity-60"
                   >
-                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 relative">
+                    <div className="aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 relative">
                       {poster && <img src={poster} alt={credit.title ?? credit.name} className="w-full h-full object-cover" loading="lazy" />}
                       {selectingCreditId === credit.id && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

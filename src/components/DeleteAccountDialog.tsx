@@ -38,10 +38,10 @@ export function DeleteAccountDialog({ open, onClose }: Props) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[60] flex items-center justify-center px-4"
+      className="fixed inset-0 z-60 flex items-center justify-center px-4"
     >
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/50 backdrop-blur-xs animate-fade-in"
         onClick={handleCancel}
       />
       <div className="relative z-10 w-full max-w-sm card p-6 animate-fade-in bg-[#f8f6f1] dark:bg-[#1a1f2e]">

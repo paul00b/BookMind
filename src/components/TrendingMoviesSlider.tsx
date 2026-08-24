@@ -13,9 +13,9 @@ interface TrendingMoviesSliderProps {
 
 function SkeletonCard() {
   return (
-    <div className="flex-shrink-0">
-      <div className="w-20 md:w-28 aspect-[2/3] rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse mb-2" />
-      <div className="w-20 md:w-28 h-3 rounded bg-gray-100 dark:bg-gray-800 animate-pulse" />
+    <div className="shrink-0">
+      <div className="w-20 md:w-28 aspect-2/3 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse mb-2" />
+      <div className="w-20 md:w-28 h-3 rounded-sm bg-gray-100 dark:bg-gray-800 animate-pulse" />
     </div>
   );
 }
@@ -137,9 +137,9 @@ export default function TrendingMoviesSlider({ onSelect }: TrendingMoviesSliderP
                   <div
                     key={movie.id}
                     onClick={() => onSelect(movie)}
-                    className="flex-shrink-0 snap-start group cursor-pointer"
+                    className="shrink-0 snap-start group cursor-pointer"
                   >
-                    <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
+                    <div className="w-20 md:w-28 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
                       {poster ? (
                         <img src={poster} alt={movie.title} className="w-full h-full object-cover" loading="lazy" />
                       ) : (
@@ -158,7 +158,7 @@ export default function TrendingMoviesSlider({ onSelect }: TrendingMoviesSliderP
               })}
 
           {loadingMore && Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={`sk-${i}`} />)}
-          <div ref={sentinelRef} className="flex-shrink-0 w-1" />
+          <div ref={sentinelRef} className="shrink-0 w-1" />
         </div>
     </div>
   );

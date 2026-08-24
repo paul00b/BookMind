@@ -8,7 +8,7 @@ interface Props {
 export default function TrailerModal({ videoKey, onClose }: Props) {
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 p-4"
       onClick={onClose}
     >
       <div

@@ -78,8 +78,8 @@ export default function BookDetailModal({ book, onClose }: Props) {
 
         <div className="flex flex-col md:flex-row gap-6 p-6">
           {/* Cover */}
-          <div className="flex-shrink-0 mx-auto md:mx-0">
-            <div className="w-32 md:w-40 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <div className="shrink-0 mx-auto md:mx-0">
+            <div className="w-32 md:w-40 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
               {localBook.cover_url ? (
                 <img src={localBook.cover_url} alt={localBook.title} className="w-full h-full object-cover" />
               ) : (

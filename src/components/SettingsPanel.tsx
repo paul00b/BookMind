@@ -48,10 +48,10 @@ function Toggle({checked, onChange}: { checked: boolean; onChange: (v: boolean) 
             role="switch"
             aria-checked={checked}
             onClick={() => onChange(!checked)}
-            className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f6f1] dark:focus-visible:ring-offset-[#1a1f2e] ${
+            className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition-all duration-200 ease-out focus:outline-hidden focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f6f1] dark:focus-visible:ring-offset-[#1a1f2e] ${
                 checked
                     ? 'border-teal-500 bg-teal-500 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08),0_6px_16px_rgba(20,184,166,0.24)]'
-                    : 'border-black/[0.08] bg-gray-200 dark:border-white/[0.08] dark:bg-white/10'
+                    : 'border-black/8 bg-gray-200 dark:border-white/8 dark:bg-white/10'
             }`}
         >
       <span
@@ -87,7 +87,7 @@ function SectionOrderEditorItem({
             className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 will-change-transform transition-[transform,opacity,background-color,border-color,box-shadow] duration-200 ease-out ${
                 dragging
                     ? 'border-amber-400 bg-amber-500/10 shadow-[0_12px_30px_rgba(245,158,11,0.18)] scale-[1.015] z-10'
-                    : 'border-black/[0.06] dark:border-white/[0.06]'
+                    : 'border-black/6 dark:border-white/6'
             }`}
         >
             <button
@@ -477,14 +477,14 @@ export default function SettingsPanel({onClose}: Props) {
     return (
         <div className="fixed inset-0 z-50 flex justify-end">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={onClose}/>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-xs animate-fade-in" onClick={onClose}/>
 
             {/* Panel */}
             <div
-                className="relative z-10 w-full max-w-sm h-full bg-[#f8f6f1] dark:bg-[#1a1f2e] border-l border-black/[0.08] dark:border-white/[0.08] overflow-hidden animate-slide-in-right flex flex-col">
+                className="relative z-10 w-full max-w-sm h-full bg-[#f8f6f1] dark:bg-[#1a1f2e] border-l border-black/8 dark:border-white/8 overflow-hidden animate-slide-in-right flex flex-col">
                 {/* Header */}
                 <div
-                    className="sticky top-0 z-10 flex items-center justify-between px-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] bg-[#f8f6f1] dark:bg-[#1a1f2e]"
+                    className="sticky top-0 z-10 flex items-center justify-between px-6 pb-4 border-b border-black/6 dark:border-white/6 bg-[#f8f6f1] dark:bg-[#1a1f2e]"
                     style={{paddingTop: 'calc(1.5rem + env(safe-area-inset-top))'}}
                 >
                     <h2 className="font-serif text-xl font-bold text-gray-900 dark:text-gray-100">{t('settings.title')}</h2>
@@ -558,7 +558,7 @@ export default function SettingsPanel({onClose}: Props) {
                                         className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl text-xs font-medium border transition-all ${
                                             theme === t.value
                                                 ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400'
-                                                : 'bg-transparent border-black/[0.08] dark:border-white/[0.08] text-gray-600 dark:text-gray-400 hover:border-amber-500/40'
+                                                : 'bg-transparent border-black/8 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-amber-500/40'
                                         }`}
                                     >
                                         {t.icon}
@@ -587,7 +587,7 @@ export default function SettingsPanel({onClose}: Props) {
                                             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-medium border transition-all ${
                                                 sectionMode === value
                                                     ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400'
-                                                    : 'bg-transparent border-black/[0.08] dark:border-white/[0.08] text-gray-600 dark:text-gray-400 hover:border-amber-500/40'
+                                                    : 'bg-transparent border-black/8 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-amber-500/40'
                                             }`}
                                         >
                                             {item.icon}
@@ -661,7 +661,7 @@ export default function SettingsPanel({onClose}: Props) {
                                                         className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all disabled:opacity-60 ${
                                                             isSubscribed
                                                                 ? 'bg-teal-500/10 text-teal-600 dark:text-teal-400 hover:bg-teal-500/20'
-                                                                : 'bg-teal-500 text-white hover:bg-teal-600 shadow-sm'
+                                                                : 'bg-teal-500 text-white hover:bg-teal-600 shadow-xs'
                                                         }`}
                                                     >
                                                         {isLoading ? '…' : isSubscribed ? t('settings.notifDeactivate') : t('settings.notifActivate')}
@@ -674,7 +674,7 @@ export default function SettingsPanel({onClose}: Props) {
                                     {/* Per-type toggles (only when subscribed) */}
                                     {(isNative() ? nativeSubscribed : subscribed) && (
                                         <div
-                                            className="space-y-3 pt-1 border-t border-black/[0.06] dark:border-white/[0.06]">
+                                            className="space-y-3 pt-1 border-t border-black/6 dark:border-white/6">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2.5">
                                                     <Tv size={14} className="text-teal-500"/>
@@ -726,7 +726,7 @@ export default function SettingsPanel({onClose}: Props) {
                                             ? 'bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30'
                                             : testNotifState === 'error'
                                                 ? 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-500/30'
-                                                : 'bg-white dark:bg-[#0f1117] text-gray-800 dark:text-gray-200 border border-black/[0.08] dark:border-white/[0.08] hover:border-teal-500/40 hover:text-teal-600 dark:hover:text-teal-400'
+                                                : 'bg-white dark:bg-[#0f1117] text-gray-800 dark:text-gray-200 border border-black/8 dark:border-white/8 hover:border-teal-500/40 hover:text-teal-600 dark:hover:text-teal-400'
                                     }`}
                                 >
                                     <Send size={14}/>
@@ -773,20 +773,20 @@ export default function SettingsPanel({onClose}: Props) {
                             <p className="text-xs text-gray-400 dark:text-gray-500 pt-1 text-center italic">
                                 {t('settings.tagline')}
                             </p>
-                            <div className="border-t border-black/[0.06] dark:border-white/[0.06] pt-3 mt-1">
+                            <div className="border-t border-black/6 dark:border-white/6 pt-3 mt-1">
                                 <button
                                     onClick={handleClearCache}
                                     disabled={refreshing}
-                                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors disabled:opacity-60"
+                                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-black/4 dark:hover:bg-white/4 transition-colors disabled:opacity-60"
                                 >
                                     <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''}/>
                                     {refreshing ? t('settings.cacheRefreshing') : t('settings.clearCache')}
                                 </button>
                             </div>
-                            <div className="border-t border-black/[0.06] dark:border-white/[0.06] pt-3 mt-1">
+                            <div className="border-t border-black/6 dark:border-white/6 pt-3 mt-1">
                                 <button
                                     onClick={handleReplayOnboarding}
-                                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors"
+                                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-black/4 dark:hover:bg-white/4 transition-colors"
                                 >
                                     <RotateCcw size={14}/>
                                     {t('settings.replayOnboarding')}
@@ -812,7 +812,7 @@ export default function SettingsPanel({onClose}: Props) {
 
             {dragPreview && (
                 <div
-                    className="fixed z-[80] pointer-events-none"
+                    className="fixed z-80 pointer-events-none"
                     style={{
                         left: dragPreview.x,
                         top: dragPreview.y - DRAG_PREVIEW_OFFSET_Y,

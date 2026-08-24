@@ -29,7 +29,7 @@ export default function Sidebar({onOpenSettings}: Props) {
 
     return (
         <aside
-            className="fixed left-0 top-0 h-full w-60 flex flex-col border-r border-black/[0.08] dark:border-white/[0.08] bg-[#f8f6f1] dark:bg-[#0f1117] z-30 px-4 py-6">
+            className="fixed left-0 top-0 h-full w-60 flex flex-col border-r border-black/8 dark:border-white/8 bg-[#f8f6f1] dark:bg-[#0f1117] z-30 px-4 py-6">
             {/* Logo */}
             <div className="flex items-center gap-2.5 px-3 mb-6">
                 <img src="/logo.png" className="w-8 h-8" alt=""/>
@@ -42,7 +42,7 @@ export default function Sidebar({onOpenSettings}: Props) {
                     onClick={() => setMode('series')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         mode === 'series'
-                            ? 'bg-white dark:bg-[#1a1f2e] text-teal-600 dark:text-teal-400 shadow-sm'
+                            ? 'bg-white dark:bg-[#1a1f2e] text-teal-600 dark:text-teal-400 shadow-xs'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                 >
@@ -53,7 +53,7 @@ export default function Sidebar({onOpenSettings}: Props) {
                     onClick={() => setMode('movies')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         mode === 'movies'
-                            ? 'bg-white dark:bg-[#1a1f2e] text-indigo-600 dark:text-indigo-400 shadow-sm'
+                            ? 'bg-white dark:bg-[#1a1f2e] text-indigo-600 dark:text-indigo-400 shadow-xs'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                 >
@@ -64,7 +64,7 @@ export default function Sidebar({onOpenSettings}: Props) {
                     onClick={() => setMode('books')}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         mode === 'books'
-                            ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-sm'
+                            ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-xs'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                 >
@@ -90,7 +90,7 @@ export default function Sidebar({onOpenSettings}: Props) {
 
             {/* Bottom: user + settings */}
             <div
-                className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors group cursor-pointer"
+                className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-black/4 dark:hover:bg-white/4 transition-colors group cursor-pointer"
                 onClick={onOpenSettings}>
                 <Avatar name={name} size="sm" imageUrl={user?.user_metadata?.avatar_url} />
                 <div className="flex-1 min-w-0">
@@ -98,7 +98,7 @@ export default function Sidebar({onOpenSettings}: Props) {
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
                 </div>
                 <Settings size={15}
-                          className="text-gray-400 group-hover:text-amber-500 transition-colors flex-shrink-0"/>
+                          className="text-gray-400 group-hover:text-amber-500 transition-colors shrink-0"/>
             </div>
         </aside>
     );

@@ -20,12 +20,12 @@ export default function BottomNav() {
     <nav data-mobile-bottom-nav className="fixed left-4 right-4 z-30 md:hidden flex flex-col gap-2" style={{ bottom: 'calc(16px + env(safe-area-inset-bottom))' }}>
       {/* Books / Movies toggle pill */}
       <div className="flex items-center justify-center">
-        <div className="flex items-center bg-white/85 dark:bg-[#1a1f2e]/85 backdrop-blur-xl border border-black/[0.08] dark:border-white/[0.08] rounded-full shadow-md p-1 gap-0.5">
+        <div className="flex items-center bg-white/85 dark:bg-[#1a1f2e]/85 backdrop-blur-xl border border-black/8 dark:border-white/8 rounded-full shadow-md p-1 gap-0.5">
           <button
             onPointerDown={(e) => { e.preventDefault(); setMode('series'); }}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all touch-manipulation ${
               mode === 'series'
-                ? 'bg-teal-500 text-white shadow-sm'
+                ? 'bg-teal-500 text-white shadow-xs'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
@@ -36,7 +36,7 @@ export default function BottomNav() {
             onPointerDown={(e) => { e.preventDefault(); setMode('movies'); }}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all touch-manipulation ${
               mode === 'movies'
-                ? 'bg-indigo-500 text-white shadow-sm'
+                ? 'bg-indigo-500 text-white shadow-xs'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
@@ -47,7 +47,7 @@ export default function BottomNav() {
             onPointerDown={(e) => { e.preventDefault(); setMode('books'); }}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all touch-manipulation ${
               mode === 'books'
-                ? 'bg-amber-500 text-white shadow-sm'
+                ? 'bg-amber-500 text-white shadow-xs'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
@@ -58,7 +58,7 @@ export default function BottomNav() {
       </div>
 
       {/* Main nav tabs */}
-      <div className="flex items-center bg-white/85 dark:bg-[#1a1f2e]/85 backdrop-blur-xl border border-black/[0.08] dark:border-white/[0.08] rounded-full shadow-lg overflow-hidden">
+      <div className="flex items-center bg-white/85 dark:bg-[#1a1f2e]/85 backdrop-blur-xl border border-black/8 dark:border-white/8 rounded-full shadow-lg overflow-hidden">
         {TABS.map(({ to, label, icon: Icon, end }) => {
           const isActive = end ? pathname === to : pathname.startsWith(to);
           return (

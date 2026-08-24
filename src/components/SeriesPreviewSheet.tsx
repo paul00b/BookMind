@@ -59,14 +59,14 @@ function EpisodeDetailSheet({ info, onClose }: { info: SelectedEpisodeInfo; onCl
   return (
     <SheetModal
       onClose={onClose}
-      rootClassName="z-[70]"
+      rootClassName="z-70"
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[80vh] flex flex-col overflow-hidden"
     >
       <SheetCloseButton className="absolute top-4 right-4 btn-ghost p-2 z-10">
         <X size={20} />
       </SheetCloseButton>
 
-      <div className="flex-shrink-0 h-6" />
+      <div className="shrink-0 h-6" />
 
       <div className="overflow-y-auto flex-1 pb-4">
         {stillUrl && (
@@ -83,7 +83,7 @@ function EpisodeDetailSheet({ info, onClose }: { info: SelectedEpisodeInfo; onCl
           <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-gray-100 leading-tight flex-1">
             {name}
           </h3>
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             {typeof info.tmdb?.vote_average === 'number' && info.tmdb.vote_average > 0 && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-semibold">
                 <Star size={11} className="fill-current" />
@@ -335,7 +335,7 @@ export default function SeriesPreviewSheet({
     <>
       <SheetModal
         onClose={onClose}
-        rootClassName="z-[60]"
+        rootClassName="z-60"
         panelClassName="md:max-w-2xl card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[90vh] flex flex-col overflow-hidden"
       >
         {/* Close */}
@@ -344,8 +344,8 @@ export default function SeriesPreviewSheet({
         </SheetCloseButton>
 
         {/* Header */}
-        <div className="flex items-start gap-4 p-6 pb-4 flex-shrink-0">
-          <div className="w-14 md:w-16 aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+        <div className="flex items-start gap-4 p-6 pb-4 shrink-0">
+          <div className="w-14 md:w-16 aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
             {posterUrl ? (
               <img src={posterUrl} alt={title} className="w-full h-full object-cover" />
             ) : (
@@ -423,9 +423,9 @@ export default function SeriesPreviewSheet({
         )}
 
           {cast.length > 0 && (
-            <div className="border border-black/[0.06] dark:border-white/[0.06] rounded-xl overflow-hidden mx-4 mb-3">
+            <div className="border border-black/6 dark:border-white/6 rounded-xl overflow-hidden mx-4 mb-3">
               <button
-                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                 onClick={() => setCastSectionOpen(open => !open)}
               >
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -437,7 +437,7 @@ export default function SeriesPreviewSheet({
                 />
               </button>
               <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${castSectionOpen ? 'max-h-64' : 'max-h-0'}`}>
-                <div className="border-t border-black/[0.06] dark:border-white/[0.06] py-4">
+                <div className="border-t border-black/6 dark:border-white/6 py-4">
                   <div className="flex gap-3 overflow-x-auto px-4 pb-1" style={{ scrollbarWidth: 'none' }}>
                     {cast.map(person => {
                       const photoUrl = getPosterUrl(person.profile_path ?? null);
@@ -446,9 +446,9 @@ export default function SeriesPreviewSheet({
                           type="button"
                           key={person.id}
                           onClick={() => setSelectedActorId(person.id)}
-                          className="w-24 flex-shrink-0 text-left"
+                          className="w-24 shrink-0 text-left"
                         >
-                          <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                          <div className="aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                             {photoUrl ? (
                               <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
                             ) : (
@@ -472,9 +472,9 @@ export default function SeriesPreviewSheet({
 
           {/* Section 1 : Épisodes */}
           {(!!tmdbId || availableSeasons.length > 0) && (
-            <div className="border border-black/[0.06] dark:border-white/[0.06] rounded-xl overflow-hidden mx-4 mb-3">
+            <div className="border border-black/6 dark:border-white/6 rounded-xl overflow-hidden mx-4 mb-3">
               <button
-                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                 onClick={handleToggleEpisodesSection}
               >
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -487,7 +487,7 @@ export default function SeriesPreviewSheet({
               </button>
 
               <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${episodesSectionOpen ? 'max-h-[200vh]' : 'max-h-0'}`}>
-                <div className="border-t border-black/[0.06] dark:border-white/[0.06]">
+                <div className="border-t border-black/6 dark:border-white/6">
 
                   {/* Sélecteur de saison */}
                   {loadingSeasonCount ? (
@@ -501,14 +501,14 @@ export default function SeriesPreviewSheet({
                   ) : null}
                   {availableSeasons.length > 0 && (
                     <div
-                      className="flex gap-2 overflow-x-auto px-4 py-3 border-b border-black/[0.06] dark:border-white/[0.06]"
+                      className="flex gap-2 overflow-x-auto px-4 py-3 border-b border-black/6 dark:border-white/6"
                       style={{ scrollbarWidth: 'none' }}
                     >
                       {availableSeasons.map(s => (
                         <button
                           key={s}
                           onClick={() => handleSelectSeason(s)}
-                          className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                          className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                             selectedSeason === s
                               ? 'bg-amber-500 text-white'
                               : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-amber-500/10 hover:text-amber-600 dark:hover:text-amber-400'
@@ -528,8 +528,8 @@ export default function SeriesPreviewSheet({
                           <div key={i} className="rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 animate-pulse">
                             <div className="aspect-video" />
                             <div className="p-2 space-y-1.5">
-                              <div className="h-2 w-8 bg-gray-200 dark:bg-gray-700 rounded" />
-                              <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded" />
+                              <div className="h-2 w-8 bg-gray-200 dark:bg-gray-700 rounded-sm" />
+                              <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded-sm" />
                             </div>
                           </div>
                         ))}
@@ -563,7 +563,7 @@ export default function SeriesPreviewSheet({
                               </p>
                               {imdb?.imdbRating != null && (
                                 <div
-                                  className="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold inline-flex"
+                                  className="mt-1 px-1.5 py-0.5 rounded-sm text-[10px] font-bold inline-flex"
                                   style={getRatingStyle(imdb.imdbRating)}
                                 >
                                   {imdb.imdbRating.toFixed(1)}
@@ -586,9 +586,9 @@ export default function SeriesPreviewSheet({
           )}
 
           {/* Section 2 : Notes IMDB */}
-          <div className="border border-black/[0.06] dark:border-white/[0.06] rounded-xl overflow-hidden mx-4 mb-3">
+          <div className="border border-black/6 dark:border-white/6 rounded-xl overflow-hidden mx-4 mb-3">
             <button
-              className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
               onClick={() => setImdbSectionOpen(open => !open)}
             >
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -601,7 +601,7 @@ export default function SeriesPreviewSheet({
             </button>
 
               <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${imdbSectionOpen ? 'max-h-[200vh]' : 'max-h-0'}`}>
-              <div className="border-t border-black/[0.06] dark:border-white/[0.06]">
+              <div className="border-t border-black/6 dark:border-white/6">
 
                   {imdbError === 'no_key' && (
                     <p className="px-4 py-4 text-sm text-gray-400 text-center">{t('seriesDetail.imdbNoApiKey')}</p>
@@ -622,18 +622,18 @@ export default function SeriesPreviewSheet({
 
                   {/* Shimmer stats */}
                   {!imdbError && !stats && !loadingImdb && (
-                    <div className="flex border-b border-black/[0.06] dark:border-white/[0.06]">
+                    <div className="flex border-b border-black/6 dark:border-white/6">
                       {[true, true, false].map((border, i) => (
-                        <div key={i} className={`flex-1 py-3 flex flex-col items-center gap-1.5${border ? ' border-r border-black/[0.06] dark:border-white/[0.06]' : ''}`}>
+                        <div key={i} className={`flex-1 py-3 flex flex-col items-center gap-1.5${border ? ' border-r border-black/6 dark:border-white/6' : ''}`}>
                           <div className="h-7 w-14 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                          <div className="h-2.5 w-10 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                          <div className="h-2.5 w-10 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse" />
                         </div>
                       ))}
                     </div>
                   )}
 
                   {stats && (
-                    <div className="flex border-b border-black/[0.06] dark:border-white/[0.06]">
+                    <div className="flex border-b border-black/6 dark:border-white/6">
                       {[
                         { value: stats.average, label: t('seriesDetail.imdbAverage'), border: true },
                         { value: stats.best,    label: t('seriesDetail.imdbBest'),    border: true },
@@ -641,7 +641,7 @@ export default function SeriesPreviewSheet({
                       ].map(({ value, label, border }) => {
                         const style = getRatingStyle(parseFloat(value));
                         return (
-                          <div key={label} className={`flex-1 py-3 flex flex-col items-center gap-1.5${border ? ' border-r border-black/[0.06] dark:border-white/[0.06]' : ''}`}>
+                          <div key={label} className={`flex-1 py-3 flex flex-col items-center gap-1.5${border ? ' border-r border-black/6 dark:border-white/6' : ''}`}>
                             <div className="px-3 py-1 rounded-md text-sm font-extrabold" style={style}>{value}</div>
                             <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</div>
                           </div>
@@ -659,16 +659,16 @@ export default function SeriesPreviewSheet({
                             <div className="h-[18px] mb-1.5" />
                             <div className="flex flex-col gap-1">
                               {Array.from({ length: 6 }).map((_, j) => (
-                                <div key={j} className="w-7 h-7 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                                <div key={j} className="w-7 h-7 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse" />
                               ))}
                             </div>
                           </div>
                           {Array.from({ length: totalSeasons ?? 3 }, (_, i) => (
                             <div key={i}>
-                              <div className="h-[18px] w-8 rounded bg-gray-200 dark:bg-gray-700 animate-pulse mb-1.5" />
+                              <div className="h-[18px] w-8 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse mb-1.5" />
                               <div className="flex flex-col gap-1">
                                 {Array.from({ length: 6 }).map((_, j) => (
-                                  <div key={j} className="w-11 h-7 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                                  <div key={j} className="w-11 h-7 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse" />
                                 ))}
                               </div>
                             </div>
@@ -705,16 +705,16 @@ export default function SeriesPreviewSheet({
                                 <div className="flex flex-col gap-1">
                                   {state === 'loading' ? (
                                     Array.from({ length: 6 }).map((_, i) => (
-                                      <div key={i} className="w-11 h-7 rounded animate-pulse bg-gray-200 dark:bg-gray-700" />
+                                      <div key={i} className="w-11 h-7 rounded-sm animate-pulse bg-gray-200 dark:bg-gray-700" />
                                     ))
                                   ) : state === 'error' ? (
-                                    <div className="w-11 h-7 rounded bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-[9px] text-gray-400">—</div>
+                                    <div className="w-11 h-7 rounded-sm bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-[9px] text-gray-400">—</div>
                                   ) : (
                                     state.map(ep => {
                                       const style = getRatingStyle(ep.imdbRating);
                                       const cell = (
                                         <div
-                                          className="w-11 h-7 rounded flex items-center justify-center text-xs font-bold select-none"
+                                          className="w-11 h-7 rounded-sm flex items-center justify-center text-xs font-bold select-none"
                                           style={style}
                                         >
                                           {ep.imdbRating?.toFixed(1) ?? 'N/A'}
@@ -754,7 +754,7 @@ export default function SeriesPreviewSheet({
                           { label: '<5',   style: getRatingStyle(4)   },
                         ].map(({ label, style }) => (
                           <div key={label} className="flex items-center gap-1.5">
-                            <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: style.background }} />
+                            <div className="w-3 h-3 rounded-xs shrink-0" style={{ background: style.background }} />
                             <span className="text-[10px] text-gray-500 dark:text-gray-400">{label}</span>
                           </div>
                         ))}

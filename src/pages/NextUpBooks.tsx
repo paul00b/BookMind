@@ -64,7 +64,7 @@ function ReadingCard({
 
   return (
     <div className="card p-4 flex gap-4 items-start">
-      <div className="w-12 aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+      <div className="w-12 aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
         {book.cover_url
           ? <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center"><BookOpen size={20} className="text-gray-400" /></div>
@@ -134,7 +134,7 @@ function NextToReadCard({
 
   return (
     <div className="card p-4 flex gap-4 items-start border-dashed opacity-80">
-      <div className="w-12 aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+      <div className="w-12 aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
         {book.cover_url
           ? <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center"><BookOpen size={20} className="text-gray-400" /></div>

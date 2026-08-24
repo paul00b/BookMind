@@ -1,6 +1,136 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+
+  --font-serif: Playfair Display, Georgia, serif;
+  --font-sans: Inter, system-ui, sans-serif;
+
+  --animate-fade-in: fadeIn 200ms ease-out;
+  --animate-slide-up: slideUp 250ms ease-out;
+  --animate-slide-in-right: slideInRight 300ms ease-out;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility card {
+  @apply bg-white dark:bg-[#1a1f2e] border border-black/8 dark:border-white/8 rounded-2xl;
+}
+
+@utility btn-primary {
+  @apply bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-full px-5 py-2.5 transition-all duration-150 active:scale-95;
+}
+
+@utility btn-ghost {
+  @apply bg-transparent hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 font-medium rounded-full px-4 py-2 transition-all duration-150;
+}
+
+@utility input {
+  @apply w-full bg-white dark:bg-[#1a1f2e] border border-black/12 dark:border-white/12 rounded-xl px-4 py-2.5 text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all;
+}
+
+.dark input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+}
+
+@utility nav-link {
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all duration-150 font-medium;
+}
+
+/* nav-link active colors are handled dynamically in Sidebar.tsx per media mode */
+
+/* ── Mode background ambiance ── */
+
+@utility mode-bg-books {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 40% at 50% -10%, #f59e0b, transparent);
+  background-size:
+    256px 256px,
+    100% 100%;
+  background-repeat: repeat, no-repeat;
+}
+
+@utility mode-bg-movies {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 40% at 50% -10%, #6366f1, transparent);
+  background-size:
+    256px 256px,
+    100% 100%;
+  background-repeat: repeat, no-repeat;
+}
+
+@utility mode-bg-series {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 40% at 50% -10%, #14b8a6, transparent);
+  background-size:
+    256px 256px,
+    100% 100%;
+  background-repeat: repeat, no-repeat;
+}
+
+@utility next-up-card-dismiss {
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: next-up-slide-out 380ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@utility next-up-card-enter {
+  will-change: transform, opacity;
+  animation: next-up-slide-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
 
 @layer base {
   :root {
@@ -64,22 +194,6 @@
 }
 
 @layer components {
-  .card {
-    @apply bg-white dark:bg-[#1a1f2e] border border-black/[0.08] dark:border-white/[0.08] rounded-2xl;
-  }
-
-  .btn-primary {
-    @apply bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-full px-5 py-2.5 transition-all duration-150 active:scale-95;
-  }
-
-  .btn-ghost {
-    @apply bg-transparent hover:bg-black/[0.05] dark:hover:bg-white/[0.05] text-gray-700 dark:text-gray-300 font-medium rounded-full px-4 py-2 transition-all duration-150;
-  }
-
-  .input {
-    @apply w-full bg-white dark:bg-[#1a1f2e] border border-black/[0.12] dark:border-white/[0.12] rounded-xl px-4 py-2.5 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all;
-  }
-
   input[type="date"] {
     max-width: 100%;
     min-width: 0;
@@ -90,54 +204,6 @@
   input[type="date"]::-webkit-calendar-picker-indicator {
     opacity: 0.5;
     cursor: pointer;
-  }
-
-  .dark input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-  }
-
-  .nav-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.05] hover:text-gray-900 dark:hover:text-white transition-all duration-150 font-medium;
-  }
-
-  /* nav-link active colors are handled dynamically in Sidebar.tsx per media mode */
-
-  /* ── Mode background ambiance ── */
-
-  .mode-bg-books {
-    background-image:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse 80% 40% at 50% -10%, #f59e0b, transparent);
-    background-size: 256px 256px, 100% 100%;
-    background-repeat: repeat, no-repeat;
-  }
-
-  .mode-bg-movies {
-    background-image:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse 80% 40% at 50% -10%, #6366f1, transparent);
-    background-size: 256px 256px, 100% 100%;
-    background-repeat: repeat, no-repeat;
-  }
-
-  .mode-bg-series {
-    background-image:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse 80% 40% at 50% -10%, #14b8a6, transparent);
-    background-size: 256px 256px, 100% 100%;
-    background-repeat: repeat, no-repeat;
-  }
-
-  .next-up-card-dismiss {
-    transform-origin: center;
-    will-change: transform, opacity;
-    animation: next-up-slide-out 380ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    pointer-events: none;
-  }
-
-  .next-up-card-enter {
-    will-change: transform, opacity;
-    animation: next-up-slide-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 

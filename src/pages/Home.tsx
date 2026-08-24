@@ -42,9 +42,9 @@ function WantToReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
             <div
               key={book.id}
               onClick={() => onSelect(book)}
-              className="flex-shrink-0 snap-start group cursor-pointer"
+              className="shrink-0 snap-start group cursor-pointer"
             >
-              <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
+              <div className="w-20 md:w-28 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
                 {book.cover_url ? (
                   <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
@@ -90,10 +90,10 @@ function LastReadSlider({ onSelect }: { onSelect: (book: Book) => void }) {
             <div
               key={book.id}
               onClick={() => onSelect(book)}
-              className="flex-shrink-0 snap-start group cursor-pointer"
+              className="shrink-0 snap-start group cursor-pointer"
             >
               {/* Cover */}
-              <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
+              <div className="w-20 md:w-28 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
                 {book.cover_url ? (
                   <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
@@ -273,7 +273,7 @@ export default function Home() {
               if (results.length > 0) setDropdownOpen(true);
             }}
             placeholder={t('home.searchPlaceholder')}
-            className="input rounded-full pl-11 pr-10 py-3.5 text-base shadow-sm"
+            className="input rounded-full pl-11 pr-10 py-3.5 text-base shadow-xs"
             autoComplete="off"
           />
           {query && (
@@ -297,7 +297,7 @@ export default function Home() {
               <div className="p-3 space-y-2">
                 {[1, 2, 3].map(i => (
                   <div key={i} className="flex gap-3 animate-pulse p-2">
-                    <div className="w-10 h-14 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0" />
+                    <div className="w-10 h-14 bg-gray-200 dark:bg-gray-700 rounded-lg shrink-0" />
                     <div className="flex-1 space-y-2 py-1">
                       <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full w-3/4" />
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-1/2" />
@@ -321,12 +321,12 @@ export default function Home() {
                   );
                   return (
                     <li key={vol.id}>
-                      {idx > 0 && <div className="border-t border-black/[0.06] dark:border-white/[0.06] mx-3" />}
+                      {idx > 0 && <div className="border-t border-black/6 dark:border-white/6 mx-3" />}
                       <button
                         onClick={() => handleSelectBook(vol)}
                         className="w-full flex items-center gap-3 px-4 py-3 hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors text-left"
                       >
-                        <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
+                        <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800">
                           {thumb ? (
                             <img src={thumb.replace('http://', 'https://')} alt="" className="w-full h-full object-cover" />
                           ) : (
@@ -341,7 +341,7 @@ export default function Home() {
                           </p>
                         </div>
                         {alreadyAdded && (
-                          <span className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
+                          <span className="shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
                             <CheckCircle2 size={12} />
                             {t('addBook.inLibrary')}
                           </span>

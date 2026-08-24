@@ -65,8 +65,8 @@ const SLIDER_STYLE: React.CSSProperties = { scrollbarWidth: 'none', msOverflowSt
 
 function SeriesSlideCard({ s, onSelect, badge }: { s: Series; onSelect: (s: Series) => void; badge: React.ReactNode }) {
   return (
-    <div key={s.id} onClick={() => onSelect(s)} className="flex-shrink-0 snap-start group cursor-pointer">
-      <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200 relative">
+    <div key={s.id} onClick={() => onSelect(s)} className="shrink-0 snap-start group cursor-pointer">
+      <div className="w-20 md:w-28 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200 relative">
         {s.poster_url ? (
           <img src={s.poster_url} alt={s.title} className="w-full h-full object-cover" loading="lazy" />
         ) : (
@@ -169,8 +169,8 @@ function LastWatchedSlider({ onSelect }: { onSelect: (s: Series) => void }) {
       </h2>
       <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {lastWatched.map(s => (
-            <div key={s.id} onClick={() => onSelect(s)} className="flex-shrink-0 snap-start group cursor-pointer">
-              <div className="w-20 md:w-28 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
+            <div key={s.id} onClick={() => onSelect(s)} className="shrink-0 snap-start group cursor-pointer">
+              <div className="w-20 md:w-28 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 group-hover:scale-[1.03] transition-transform duration-200">
                 {s.poster_url ? (
                   <img src={s.poster_url} alt={s.title} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
@@ -369,7 +369,7 @@ export default function SeriesHome() {
               if (results.length > 0) setDropdownOpen(true);
             }}
             placeholder={t('seriesHome.searchPlaceholder')}
-            className="input rounded-full pl-11 pr-10 py-3.5 text-base shadow-sm"
+            className="input rounded-full pl-11 pr-10 py-3.5 text-base shadow-xs"
             autoComplete="off"
           />
           {query && (
@@ -392,7 +392,7 @@ export default function SeriesHome() {
               <div className="p-3 space-y-2">
                 {[1, 2, 3].map(i => (
                   <div key={i} className="flex gap-3 animate-pulse p-2">
-                    <div className="w-10 h-14 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0" />
+                    <div className="w-10 h-14 bg-gray-200 dark:bg-gray-700 rounded-lg shrink-0" />
                     <div className="flex-1 space-y-2 py-1">
                       <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full w-3/4" />
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-1/2" />
@@ -411,14 +411,14 @@ export default function SeriesHome() {
                   const alreadyAdded = !!findExistingSeries(s);
                   return (
                     <li key={s.id}>
-                      {idx > 0 && <div className="border-t border-black/[0.06] dark:border-white/[0.06] mx-3" />}
+                      {idx > 0 && <div className="border-t border-black/6 dark:border-white/6 mx-3" />}
                       <div className="flex items-center hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors">
                         <button
                           onClick={() => handleSelectSeries(s)}
                           disabled={selectingId != null}
                           className="flex-1 flex items-center gap-3 px-4 py-3 text-left min-w-0 disabled:opacity-60"
                         >
-                          <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800">
+                          <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800">
                             {posterUrl ? (
                               <img src={posterUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
@@ -434,9 +434,9 @@ export default function SeriesHome() {
                             </p>
                           </div>
                           {selectingId === s.id ? (
-                            <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin flex-shrink-0" />
+                            <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin shrink-0" />
                           ) : alreadyAdded && (
-                            <span className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
+                            <span className="shrink-0 flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
                               <CheckCircle2 size={12} />
                               {t('seriesHome.inList')}
                             </span>
@@ -445,7 +445,7 @@ export default function SeriesHome() {
                         <button
                           onClick={(e) => { e.stopPropagation(); setDropdownOpen(false); setRatingsTarget(s); }}
                           disabled={selectingId != null}
-                          className="flex-shrink-0 mr-3 p-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors disabled:opacity-60"
+                          className="shrink-0 mr-3 p-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors disabled:opacity-60"
                           title={t('seriesDetail.viewImdbRatings')}
                         >
                           <Eye size={17} />

@@ -132,9 +132,9 @@ export default function NextUpMovies() {
         </div>
         <div className="flex gap-4 overflow-hidden px-4 md:px-0">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex-shrink-0 w-36">
-              <div className="aspect-[2/3] rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
-              <div className="h-4 mt-2 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
+            <div key={i} className="shrink-0 w-36">
+              <div className="aspect-2/3 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
+              <div className="h-4 mt-2 bg-gray-100 dark:bg-gray-800 rounded-sm animate-pulse" />
             </div>
           ))}
         </div>
@@ -175,11 +175,11 @@ export default function NextUpMovies() {
             })();
 
             return (
-              <div key={`${sectionTitle}-${movie.id}`} className="flex h-full min-h-[21rem] flex-shrink-0 flex-col w-36">
+              <div key={`${sectionTitle}-${movie.id}`} className="flex h-full min-h-84 shrink-0 flex-col w-36">
                 <button
                   type="button"
                   onClick={() => setSelectedMovie(movie)}
-                  className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 text-left transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+                  className="aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 text-left transition-transform hover:scale-[1.02] focus:outline-hidden focus:ring-2 focus:ring-amber-400/40"
                   aria-label={t('nextUp.openMovieDetails', { title: movie.title })}
                 >
                   {movie.poster_path
@@ -201,7 +201,7 @@ export default function NextUpMovies() {
                 )}
                 <button
                     onClick={() => void handleAdd(movie)}
-                    className="mt-auto inline-flex min-h-8 items-center justify-center rounded-full border border-gray-200 bg-white px-2 text-xs font-medium text-gray-600 transition-colors hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400/40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-amber-800/60 dark:hover:bg-amber-500/10 dark:hover:text-amber-300"
+                    className="mt-auto inline-flex min-h-8 items-center justify-center rounded-full border border-gray-200 bg-white px-2 text-xs font-medium text-gray-600 transition-colors hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400/40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-amber-800/60 dark:hover:bg-amber-500/10 dark:hover:text-amber-300"
                   >
                     {t('nextUp.addToWatchlist')}
                   </button>
@@ -280,7 +280,7 @@ function MoviePreviewSheet({
       scrollable
     >
         <SheetCloseButton
-          className="absolute right-4 top-4 h-10 w-10 rounded-full bg-white/85 text-gray-700 shadow-sm backdrop-blur flex items-center justify-center dark:bg-gray-900/85 dark:text-gray-200"
+          className="absolute right-4 top-4 h-10 w-10 rounded-full bg-white/85 text-gray-700 shadow-xs backdrop-blur-sm flex items-center justify-center dark:bg-gray-900/85 dark:text-gray-200"
           aria-label={t('nextUp.closeMovieDetails')}
         >
           <X size={18} />
@@ -288,7 +288,7 @@ function MoviePreviewSheet({
 
         <div className="p-5 md:p-6">
           <div className="flex gap-4">
-            <div className="w-24 md:w-28 aspect-[2/3] rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+            <div className="w-24 md:w-28 aspect-2/3 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
               {posterUrl
                 ? <img src={posterUrl} alt={movie.title} className="w-full h-full object-cover" />
                 : <div className="w-full h-full flex items-center justify-center"><Film size={28} className="text-gray-400" /></div>
@@ -362,7 +362,7 @@ function MoviePreviewSheet({
               <button
                 type="button"
                 onClick={() => void onAdd(movie)}
-                className="inline-flex min-h-11 min-w-[9.5rem] items-center justify-center gap-2.5 rounded-full bg-amber-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+                className="inline-flex min-h-11 min-w-38 items-center justify-center gap-2.5 rounded-full bg-amber-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
               >
                 <Plus size={18} strokeWidth={2.4} />
                 {t('nextUp.addToWatchlist')}

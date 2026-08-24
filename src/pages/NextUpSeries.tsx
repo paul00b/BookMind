@@ -532,7 +532,7 @@ function SeriesNextCard({
 
   return (
     <div
-      className={`card relative overflow-hidden p-4 flex gap-4 items-center ${dismissing ? 'next-up-card-dismiss' : ''} ${entering ? 'next-up-card-enter' : ''} ${clickable ? 'cursor-pointer transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.02]' : ''}`}
+      className={`card relative overflow-hidden p-4 flex gap-4 items-center ${dismissing ? 'next-up-card-dismiss' : ''} ${entering ? 'next-up-card-enter' : ''} ${clickable ? 'cursor-pointer transition-colors hover:bg-black/2 dark:hover:bg-white/2' : ''}`}
       onClick={clickable ? () => onOpenEpisode(series, state) : undefined}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
@@ -543,7 +543,7 @@ function SeriesNextCard({
         }
       } : undefined}
     >
-      <div className="w-12 aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+      <div className="w-12 aspect-2/3 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
         {series.poster_url
           ? <img src={series.poster_url} alt={series.title} className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center"><Tv size={20} className="text-gray-400" /></div>
@@ -562,7 +562,7 @@ function SeriesNextCard({
             onMarkEpisodeWatched(series, state.season, state.episode);
           }}
           disabled={dismissing}
-          className="h-10 w-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm transition-all duration-150 hover:bg-emerald-600 active:scale-95 shrink-0 self-center disabled:opacity-60"
+          className="h-10 w-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs transition-all duration-150 hover:bg-emerald-600 active:scale-95 shrink-0 self-center disabled:opacity-60"
           title={t('nextUp.markEpisodeWatched')}
           aria-label={t('nextUp.markEpisodeWatched')}
         >
@@ -612,7 +612,7 @@ function EpisodeDetailSheet({
 
         <div className="p-6 pb-5">
           <div className="flex gap-4 items-start">
-            <div className="w-20 aspect-[2/3] rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
+            <div className="w-20 aspect-2/3 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
               {series.poster_url ? (
                 <img src={series.poster_url} alt={series.title} className="w-full h-full object-cover" />
               ) : (
@@ -656,7 +656,7 @@ function EpisodeDetailSheet({
           </div>
 
           {stillUrl && (
-            <div className="mt-5 rounded-2xl overflow-hidden border border-black/[0.06] dark:border-white/[0.06] bg-gray-100 dark:bg-gray-900/40">
+            <div className="mt-5 rounded-2xl overflow-hidden border border-black/6 dark:border-white/6 bg-gray-100 dark:bg-gray-900/40">
               <img src={stillUrl} alt={episodeName || `${series.title} ${t('nextUp.seasonEpisode', { season: seasonNumber, episode: episodeNumber })}`} className="w-full h-auto object-cover" />
             </div>
           )}
@@ -666,9 +666,9 @@ function EpisodeDetailSheet({
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{t('nextUp.episodeSynopsis')}</p>
               {loading ? (
                 <div className="space-y-2">
-                  <div className="h-3.5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                  <div className="h-3.5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse w-11/12" />
-                  <div className="h-3.5 rounded bg-gray-200 dark:bg-gray-700 animate-pulse w-8/12" />
+                  <div className="h-3.5 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-3.5 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse w-11/12" />
+                  <div className="h-3.5 rounded-sm bg-gray-200 dark:bg-gray-700 animate-pulse w-8/12" />
                 </div>
               ) : overview ? (
                 <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{overview}</p>

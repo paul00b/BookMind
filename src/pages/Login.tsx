@@ -60,7 +60,7 @@ export default function Login() {
                 onClick={() => { setMode(m); setError(''); setSuccess(''); }}
                 className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
                   mode === m
-                    ? 'bg-white dark:bg-[#1a1f2e] text-gray-900 dark:text-gray-100 shadow-sm'
+                    ? 'bg-white dark:bg-[#1a1f2e] text-gray-900 dark:text-gray-100 shadow-xs'
                     : 'text-gray-500 dark:text-gray-400'
                 }`}
               >

@@ -18,7 +18,7 @@ export default function SeriesCard({ series, onClick }: SeriesCardProps) {
       className="card text-left group cursor-pointer hover:scale-[1.02] transition-transform duration-200 overflow-hidden flex flex-col"
     >
       {/* Poster */}
-      <div className="relative w-full aspect-[2/3] bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden mb-3">
+      <div className="relative w-full aspect-2/3 bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden mb-3">
         {series.poster_url ? (
           <img
             src={series.poster_url}

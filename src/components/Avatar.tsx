@@ -23,7 +23,7 @@ function getInitials(name: string) {
 }
 
 export default function Avatar({ name, imageUrl, size = 'md', className = '' }: AvatarProps) {
-    const baseClasses = `${SIZES[size]} rounded-full flex-shrink-0 ${className}`;
+    const baseClasses = `${SIZES[size]} rounded-full shrink-0 ${className}`;
 
     // Si une image est fournie, on l'affiche directement
     if (imageUrl) {

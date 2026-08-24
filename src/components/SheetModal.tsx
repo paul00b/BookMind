@@ -56,7 +56,7 @@ export default function SheetModal({
   children,
   onClose,
   panelClassName,
-  overlayClassName = 'bg-black/50 backdrop-blur-sm animate-fade-in',
+  overlayClassName = 'bg-black/50 backdrop-blur-xs animate-fade-in',
   rootClassName = 'z-50',
   zIndex,
   showHandle = true,
@@ -170,7 +170,7 @@ export default function SheetModal({
           onTouchEnd={e => e.stopPropagation()}
         >
           {showHandle && (
-            <div className={`md:hidden z-10 px-6 pt-1 pb-3 bg-white dark:bg-[#1a1f2e] ${scrollable ? 'flex-shrink-0' : 'sticky top-0'}`}>
+            <div className={`md:hidden z-10 px-6 pt-1 pb-3 bg-white dark:bg-[#1a1f2e] ${scrollable ? 'shrink-0' : 'sticky top-0'}`}>
               <div
                 className="mx-auto flex h-8 w-40 max-w-full items-center justify-center touch-none"
                 onPointerDown={handlePointerDown}
@@ -178,7 +178,7 @@ export default function SheetModal({
               <div className="pointer-events-none mx-auto -mt-4 h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-600" />
             </div>
           )}
-          {header && <div className="flex-shrink-0">{header}</div>}
+          {header && <div className="shrink-0">{header}</div>}
           {scrollable && showHandle ? (
             <div className="flex-1 min-h-0 overflow-y-auto">{children}</div>
           ) : children}

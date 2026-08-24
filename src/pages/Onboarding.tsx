@@ -53,9 +53,9 @@ function Slide2Illustration() {
 function Slide3Illustration() {
   return (
     <div className="flex gap-3 items-end">
-      <div className="w-12 h-[68px] rounded-lg bg-gradient-to-br from-teal-500/20 to-teal-500/5 border border-teal-500/20" />
-      <div className="w-12 h-[68px] rounded-lg bg-gradient-to-br from-teal-500/30 to-teal-500/10 border border-teal-500/30 scale-110" />
-      <div className="w-12 h-[68px] rounded-lg bg-gradient-to-br from-teal-500/20 to-teal-500/5 border border-teal-500/20" />
+      <div className="w-12 h-[68px] rounded-lg bg-linear-to-br from-teal-500/20 to-teal-500/5 border border-teal-500/20" />
+      <div className="w-12 h-[68px] rounded-lg bg-linear-to-br from-teal-500/30 to-teal-500/10 border border-teal-500/30 scale-110" />
+      <div className="w-12 h-[68px] rounded-lg bg-linear-to-br from-teal-500/20 to-teal-500/5 border border-teal-500/20" />
     </div>
   );
 }

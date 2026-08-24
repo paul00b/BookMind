@@ -119,7 +119,7 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
 
   const duplicateWarning = isDuplicate && (
     <div className="flex items-start gap-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl px-4 py-3">
-      <AlertTriangle size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
+      <AlertTriangle size={15} className="text-amber-500 shrink-0 mt-0.5" />
       <p className="text-sm text-amber-700 dark:text-amber-300">{t('addMovie.alreadyInWatchlist')}</p>
     </div>
   );
@@ -197,8 +197,8 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
 
         <div className="p-6 space-y-6">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-shrink-0 mx-auto md:mx-0">
-              <div className="w-32 md:w-40 aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+            <div className="shrink-0 mx-auto md:mx-0">
+              <div className="w-32 md:w-40 aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                 {form.poster_url ? (
                   <img src={form.poster_url} alt={form.title} className="w-full h-full object-cover" />
                 ) : (
@@ -278,11 +278,11 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
           </div>
 
           {cast.length > 0 && (
-              <div className="border border-black/[0.06] dark:border-white/[0.06] rounded-xl overflow-hidden">
+              <div className="border border-black/6 dark:border-white/6 rounded-xl overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setCastOpen(open => !open)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
                 >
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     {t('movieDetail.cast')} ({cast.length})
@@ -293,7 +293,7 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
                   />
                 </button>
                 <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${castOpen ? 'max-h-64' : 'max-h-0'}`}>
-                  <div className="border-t border-black/[0.06] dark:border-white/[0.06] py-4">
+                  <div className="border-t border-black/6 dark:border-white/6 py-4">
                     <div className="flex gap-3 overflow-x-auto px-4 pb-1" style={{ scrollbarWidth: 'none' }}>
                       {cast.map(person => {
                         const photoUrl = getPosterUrl(person.profile_path ?? null);
@@ -302,9 +302,9 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
                             type="button"
                             key={person.id}
                             onClick={() => setSelectedActorId(person.id)}
-                            className="w-24 flex-shrink-0 text-left"
+                            className="w-24 shrink-0 text-left"
                           >
-                            <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            <div className="aspect-2/3 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                               {photoUrl ? (
                                 <img src={photoUrl} alt={person.name} className="w-full h-full object-cover" loading="lazy" />
                               ) : (
@@ -363,7 +363,7 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
       panelClassName="md:max-w-lg card animate-slide-up md:rounded-2xl rounded-t-3xl rounded-b-none max-h-[92vh]"
       scrollable
       header={
-        <div className="flex items-center justify-between p-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
+        <div className="flex items-center justify-between p-6 pb-4 border-b border-black/6 dark:border-white/6">
           <h2 className="font-serif text-xl font-bold text-gray-900 dark:text-gray-100">{t('addMovie.title')}</h2>
           <SheetCloseButton className="btn-ghost p-2"><X size={18} /></SheetCloseButton>
         </div>
@@ -373,7 +373,7 @@ export default function AddMovieModal({ prefill, onClose, zIndex, actorZIndexBas
         {/* Poster preview */}
         {form.poster_url && (
           <div className="flex justify-center mb-2">
-            <div className="w-20 aspect-[2/3] rounded-xl overflow-hidden shadow-md">
+            <div className="w-20 aspect-2/3 rounded-xl overflow-hidden shadow-md">
               <img src={form.poster_url} alt="Poster" className="w-full h-full object-cover" />
             </div>
           </div>

@@ -46,7 +46,7 @@ function EmptyState({ isCategoryTab, onAddSeries }: { isCategoryTab?: boolean; o
 
 function SelectDropdown({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
-    <div className="relative flex-shrink-0">
+    <div className="relative shrink-0">
       <select value={value} onChange={e => onChange(e.target.value)} className="appearance-none input py-2 pr-8 text-sm cursor-pointer">
         {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
@@ -61,7 +61,7 @@ function SeriesListRow({ series, onClick, onRemove }: { series: Series; onClick:
   return (
     <div className="relative group">
       <button onClick={onClick} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors text-left">
-        <div className="w-10 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <div className="w-10 h-14 shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
           {series.poster_url ? (
             <img src={series.poster_url} alt={series.title} className="w-full h-full object-cover" loading="lazy" />
           ) : (
@@ -75,10 +75,10 @@ function SeriesListRow({ series, onClick, onRemove }: { series: Series; onClick:
           <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{series.creator}</p>
         </div>
         {series.genre && (
-          <span className="hidden sm:inline-flex flex-shrink-0 text-xs bg-amber-500/10 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full font-medium">{series.genre}</span>
+          <span className="hidden sm:inline-flex shrink-0 text-xs bg-amber-500/10 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full font-medium">{series.genre}</span>
         )}
         {effectiveStatus === 'watched' && series.rating && (
-          <div className="hidden sm:flex flex-shrink-0">
+          <div className="hidden sm:flex shrink-0">
             <StarRating value={series.rating} readonly size={12} />
           </div>
         )}
@@ -90,7 +90,7 @@ function SeriesListRow({ series, onClick, onRemove }: { series: Series; onClick:
             : effectiveStatus === 'watched'
             ? t('seriesCard.watched')
             : effectiveStatus === 'watching' ? t('seriesCard.watching') : t('seriesCard.wantToWatch');
-          return <span className={`flex-shrink-0 text-xs font-medium px-2.5 py-1 rounded-full text-white ${bgClass}`}>{label}</span>;
+          return <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full text-white ${bgClass}`}>{label}</span>;
         })()}
       </button>
       {onRemove && (
@@ -208,7 +208,7 @@ export default function SeriesLibrary() {
       amber:  'border-amber-500 text-amber-600 dark:text-amber-400',
       emerald:'border-emerald-500 text-emerald-600 dark:text-emerald-400',
     };
-    return `pb-3 px-1 text-sm font-medium border-b-2 transition-all -mb-px flex-shrink-0 flex items-center gap-1.5 ${
+    return `pb-3 px-1 text-sm font-medium border-b-2 transition-all -mb-px shrink-0 flex items-center gap-1.5 ${
       isActive ? (colors[color] ?? colors.amber) : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
     }`;
   };
@@ -242,17 +242,17 @@ export default function SeriesLibrary() {
             <BarChart2 size={18} />
           </button>
           <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
-            <button onClick={() => handleSetViewMode('grid')} className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}>
+            <button onClick={() => handleSetViewMode('grid')} className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-xs' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}>
               <LayoutGrid size={16} />
             </button>
-            <button onClick={() => handleSetViewMode('list')} className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}>
+            <button onClick={() => handleSetViewMode('list')} className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white dark:bg-[#1a1f2e] text-amber-600 dark:text-amber-400 shadow-xs' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}>
               <List size={16} />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="-mx-4 mb-6 overflow-x-auto overflow-y-hidden border-b border-black/[0.06] px-4 pb-0 [touch-action:pan-x] dark:border-white/[0.06] md:mx-0 md:px-0" style={{ scrollbarWidth: 'none' }}>
+      <div className="-mx-4 mb-6 overflow-x-auto overflow-y-hidden border-b border-black/6 px-4 pb-0 [touch-action:pan-x] dark:border-white/6 md:mx-0 md:px-0" style={{ scrollbarWidth: 'none' }}>
         <div className="flex min-w-max gap-2">
           {([
             ['watching',     t('seriesLibrary.watching'),    'blue',    <Play size={13} />],
@@ -264,7 +264,7 @@ export default function SeriesLibrary() {
             </button>
           ))}
           {seriesCategories.map(cat => (
-            <div key={cat.id} className="relative group flex-shrink-0 flex items-end">
+            <div key={cat.id} className="relative group shrink-0 flex items-end">
               <button onClick={() => setActiveTab(cat.id)} className={tabClass(activeTab === cat.id) + ' pr-5'}>
                 {cat.title}{countBadge(cat.series_ids.length, activeTab === cat.id)}
               </button>
@@ -274,13 +274,13 @@ export default function SeriesLibrary() {
             </div>
           ))}
           {creatingCategory ? (
-            <form onSubmit={handleCreateCategory} className="flex items-center gap-1 pb-3 flex-shrink-0">
+            <form onSubmit={handleCreateCategory} className="flex items-center gap-1 pb-3 shrink-0">
               <input ref={nameInputRef} value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} placeholder={t('seriesLibrary.newCategoryPlaceholder')} className="input py-1 text-sm w-36" onBlur={() => { if (!newCategoryName.trim()) setCreatingCategory(false); }} />
               <button type="submit" className="p-1 text-amber-600 hover:text-amber-700"><Check size={16} /></button>
               <button type="button" onClick={() => { setCreatingCategory(false); setNewCategoryName(''); }} className="p-1 text-gray-400 hover:text-gray-600"><X size={16} /></button>
             </form>
           ) : (
-            <button onClick={() => setCreatingCategory(true)} className="pb-3 px-1 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 -mb-px flex-shrink-0 flex items-center gap-1 transition-colors">
+            <button onClick={() => setCreatingCategory(true)} className="pb-3 px-1 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 -mb-px shrink-0 flex items-center gap-1 transition-colors">
               <Plus size={14} />{t('seriesLibrary.newCategory')}
             </button>
           )}
@@ -291,7 +291,7 @@ export default function SeriesLibrary() {
         const cat = seriesCategories.find(c => c.id === deletingCategoryId)!;
         return (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3 text-sm">
-            <Trash2 size={15} className="text-red-500 flex-shrink-0" />
+            <Trash2 size={15} className="text-red-500 shrink-0" />
             <span className="flex-1 text-red-700 dark:text-red-400">{t('seriesLibrary.confirmDeleteCategory', { name: cat.title })}</span>
             <button onClick={() => handleDeleteCategory(deletingCategoryId)} className="font-medium text-red-600 hover:underline">{t('seriesLibrary.yesDelete')}</button>
             <button onClick={() => setDeletingCategoryId(null)} className="text-gray-500 hover:underline">{t('seriesLibrary.cancel')}</button>
@@ -327,7 +327,7 @@ export default function SeriesLibrary() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="card overflow-hidden flex flex-col animate-pulse">
-              <div className="w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700 rounded-xl mb-3" />
+              <div className="w-full aspect-2/3 bg-gray-200 dark:bg-gray-700 rounded-xl mb-3" />
               <div className="px-1 pb-1 space-y-2">
                 <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full w-4/5" />
                 <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-3/5" />
@@ -350,7 +350,7 @@ export default function SeriesLibrary() {
             ))}
           </div>
         ) : (
-          <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
+          <div className="card divide-y divide-black/5 dark:divide-white/5 overflow-hidden">
             {categorySeries.map(s => (
               <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} onRemove={() => removeSeriesFromCategory(activeCategory.id, s.id)} />
             ))}
@@ -380,7 +380,7 @@ export default function SeriesLibrary() {
                     {active.map(s => <SeriesCard key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
                   </div>
                 ) : (
-                  <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
+                  <div className="card divide-y divide-black/5 dark:divide-white/5 overflow-hidden">
                     {active.map(s => <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
                   </div>
                 )}
@@ -394,7 +394,7 @@ export default function SeriesLibrary() {
                     {waiting.map(s => <SeriesCard key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
                   </div>
                 ) : (
-                  <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
+                  <div className="card divide-y divide-black/5 dark:divide-white/5 overflow-hidden">
                     {waiting.map(s => <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />)}
                   </div>
                 )}
@@ -409,7 +409,7 @@ export default function SeriesLibrary() {
           ))}
         </div>
       ) : (
-        <div className="card divide-y divide-black/[0.05] dark:divide-white/[0.05] overflow-hidden">
+        <div className="card divide-y divide-black/5 dark:divide-white/5 overflow-hidden">
           {filtered.map(s => (
             <SeriesListRow key={s.id} series={s} onClick={() => setSelectedSeries(s)} />
           ))}

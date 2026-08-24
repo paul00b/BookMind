@@ -100,7 +100,7 @@ function SeriesStatsSheetContent({ onClose, series }: Omit<Props, 'isOpen'>) {
           {stats.loadingMinutes ? (
             <div className="h-8 w-24 bg-teal-500/20 rounded-lg animate-pulse" />
           ) : (
-            <p className="font-serif text-3xl font-bold text-teal-600 dark:text-teal-400 leading-tight break-words">
+            <p className="font-serif text-3xl font-bold text-teal-600 dark:text-teal-400 leading-tight wrap-break-word">
               {stats.totalMinutes !== null ? formatHours(stats.totalMinutes, isFr) : '—'}
             </p>
           )}
