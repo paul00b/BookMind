@@ -67,11 +67,26 @@ async function doFetch(url: string, options?: RequestInit): Promise<Response | n
   }
 }
 
+/** Choisit le meilleur candidat série : titre exact d'abord, puis année la plus proche. */
+function pickSeriesMatch(
+  candidates: Array<{ id: string; l?: string; y?: number }>,
+  normalizedTitle: string,
+  year?: number | null
+): string | null {
+  const exact = candidates.filter(item => (item.l ?? '').trim().toLowerCase() === normalizedTitle);
+  const pool = exact.length > 0 ? exact : candidates;
+  if (year) {
+    const byYear = pool.find(item => item.y != null && Math.abs(item.y - year) <= 1);
+    if (byYear) return byYear.id;
+  }
+  return pool[0]?.id ?? null;
+}
+
 /** Cherche l'imdbID d'une série via l'API suggestion IMDb. */
-export async function fetchSeriesImdbId(title: string): Promise<string | null> {
+export async function fetchSeriesImdbId(title: string, year?: number | null): Promise<string | null> {
   const normalizedTitle = title.trim().toLowerCase();
   if (!normalizedTitle) return null;
-  const cacheKey = `nookmind_imdb_id_${encodeURIComponent(normalizedTitle)}`;
+  const cacheKey = `nookmind_imdb_id_${encodeURIComponent(normalizedTitle)}_${year ?? 'na'}`;
   const cached = getSessionCache<string | null>(cacheKey);
   if (cached !== null) return cached;
 
@@ -83,9 +98,9 @@ export async function fetchSeriesImdbId(title: string): Promise<string | null> {
       if (!res) return null;
       try {
         const data = await res.json();
-        const match = (data.d as Array<{ id: string; q?: string }> | undefined)
-          ?.find(item => item.q === 'TV series' || item.q === 'TV mini-series' || item.q === 'TV short');
-        const imdbId = match?.id ?? null;
+        const candidates = (data.d as Array<{ id: string; l?: string; q?: string; y?: number }> | undefined)
+          ?.filter(item => item.q === 'TV series' || item.q === 'TV mini-series' || item.q === 'TV short') ?? [];
+        const imdbId = pickSeriesMatch(candidates, normalizedTitle, year);
         setSessionCache(cacheKey, imdbId);
         return imdbId;
       } catch {
@@ -164,7 +179,8 @@ async function fetchAllEpisodesRaw(imdbId: string): Promise<Record<number, Episo
   for (const edge of allEdges) {
     const seasonStr = edge.node.series?.displayableEpisodeNumber?.displayableSeason?.text;
     const seasonNum = seasonStr ? parseInt(seasonStr, 10) : undefined;
-    const episodeNum = edge.node.series?.displayableEpisodeNumber?.episodeNumber?.episodeNumber;
+    const rawEpisodeNum = edge.node.series?.displayableEpisodeNumber?.episodeNumber?.episodeNumber;
+    const episodeNum = rawEpisodeNum != null ? parseInt(String(rawEpisodeNum), 10) : undefined;
     if (!seasonNum || !episodeNum || seasonNum <= 0 || episodeNum <= 0) continue;
 
     if (!result[seasonNum]) result[seasonNum] = [];
@@ -201,6 +217,35 @@ export async function fetchSeasonRatings(
   const all = await getAllEpisodes(imdbId);
   if (!all) return null;
   return all[season] ?? null;
+}
+
+/**
+ * Associe les notes IMDb aux épisodes TMDB par position globale de diffusion
+ * plutôt que par (saison, épisode) : les épisodes IMDb sont mis à plat dans
+ * l'ordre (saison, épisode), puis réattribués selon les comptes d'épisodes
+ * TMDB de chaque saison. Robuste aux découpages de saisons différents entre
+ * les deux sources (ex. anime).
+ */
+export function buildFlatEpisodeLookup(
+  seasonRatings: Record<number, EpisodeRating[] | 'loading' | 'error'>,
+  tmdbSeasonCounts: Record<number, number>
+): (season: number, episode: number) => EpisodeRating | undefined {
+  const flat = Object.keys(seasonRatings)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .flatMap(s => (Array.isArray(seasonRatings[s]) ? (seasonRatings[s] as EpisodeRating[]) : []));
+  const base: Record<number, number> = {};
+  let acc = 0;
+  const maxSeason = Math.max(0, ...Object.keys(tmdbSeasonCounts).map(Number));
+  for (let s = 1; s <= maxSeason; s++) {
+    base[s] = acc;
+    acc += tmdbSeasonCounts[s] ?? 0;
+  }
+  return (season, episode) => {
+    const start = base[season];
+    if (start == null) return undefined;
+    return flat[start + episode - 1];
+  };
 }
 
 export interface MovieImdbRating {

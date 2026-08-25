@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { X, Tv, Plus, ChevronDown, Star, CheckCircle2, Play } from 'lucide-react';
-import { fetchSeriesImdbId, fetchSeasonRatings, type EpisodeRating } from '../lib/imdb';
+import { X, Tv, Plus, ChevronDown, CheckCircle2, Play } from 'lucide-react';
+import EpisodeRatingBadge from './EpisodeRatingBadge';
+import { fetchSeriesImdbId, fetchSeasonRatings, buildFlatEpisodeLookup, type EpisodeRating } from '../lib/imdb';
 import { getRatingStyle, type SeasonState } from '../lib/imdbRatingStyle';
 import { fetchSeasonDetails, fetchSeriesDetails, fetchTrailerKey, getPosterUrl } from '../lib/tmdb';
 import TrailerModal from './TrailerModal';
@@ -84,20 +85,7 @@ function EpisodeDetailSheet({ info, onClose }: { info: SelectedEpisodeInfo; onCl
             {name}
           </h3>
           <div className="flex items-center gap-2 shrink-0">
-            {typeof info.tmdb?.vote_average === 'number' && info.tmdb.vote_average > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-                <Star size={11} className="fill-current" />
-                {info.tmdb.vote_average.toFixed(1)}
-              </span>
-            )}
-            {info.imdb?.imdbRating != null && (
-              <div
-                className="px-3 py-1.5 rounded-lg text-sm font-extrabold"
-                style={getRatingStyle(info.imdb.imdbRating)}
-              >
-                {info.imdb.imdbRating.toFixed(1)}
-              </div>
-            )}
+            <EpisodeRatingBadge imdb={info.imdb} tmdb={info.tmdb} size="md" />
           </div>
         </div>
 
@@ -215,12 +203,12 @@ export default function SeriesPreviewSheet({
     setCastSectionOpen(false);
     loadedSeasonsRef.current = new Set();
 
-    fetchSeriesImdbId(title).then(id => {
+    fetchSeriesImdbId(title, firstAirDate ? parseInt(firstAirDate.slice(0, 4), 10) : null).then(id => {
       setLoadingImdb(false);
       if (!id) { setImdbError('not_found'); return; }
       setImdbId(id);
     });
-  }, [isOpen, title, fetchKey]);
+  }, [isOpen, title, firstAirDate, fetchKey]);
 
   // Charge les saisons IMDB en parallèle une fois l'imdbID obtenu
   useEffect(() => {
@@ -319,11 +307,15 @@ export default function SeriesPreviewSheet({
     ? (seasonRatings[selectedSeason] as EpisodeRating[])
     : [];
 
+  const imdbLookup = buildFlatEpisodeLookup(
+    seasonRatings,
+    Object.fromEntries((tmdbSeries?.seasons ?? []).filter(s => s.season_number > 0).map(s => [s.season_number, s.episode_count]))
+  );
   const episodesToShow = currentTmdbEps.length > 0
     ? currentTmdbEps.map(ep => ({
         episodeNum: ep.episode_number,
         tmdb: ep,
-        imdb: currentImdbEps.find(ie => ie.episode === ep.episode_number),
+        imdb: imdbLookup(selectedSeason ?? 0, ep.episode_number),
       }))
     : currentImdbEps.map(ep => ({
         episodeNum: ep.episode,
@@ -486,7 +478,8 @@ export default function SeriesPreviewSheet({
                 />
               </button>
 
-              <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${episodesSectionOpen ? 'max-h-[200vh]' : 'max-h-0'}`}>
+              <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${episodesSectionOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                <div className="overflow-hidden min-h-0">
                 <div className="border-t border-black/6 dark:border-white/6">
 
                   {/* Sélecteur de saison */}
@@ -542,7 +535,7 @@ export default function SeriesPreviewSheet({
                             onClick={() => setSelectedEpisode({ episodeNum, seasonNum: selectedSeason, tmdb, imdb })}
                             className="text-left bg-gray-50 dark:bg-gray-800/50 rounded-xl overflow-hidden hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors"
                           >
-                            <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                            <div className="relative w-full aspect-video bg-gray-200 dark:bg-gray-700 overflow-hidden">
                               {tmdb?.still_path ? (
                                 <img
                                   src={`https://image.tmdb.org/t/p/w185${tmdb.still_path}`}
@@ -555,20 +548,15 @@ export default function SeriesPreviewSheet({
                                   <Tv size={18} className="text-gray-400 dark:text-gray-500" />
                                 </div>
                               )}
+                              <span className="absolute top-1.5 right-1.5">
+                                <EpisodeRatingBadge imdb={imdb} tmdb={tmdb} />
+                              </span>
                             </div>
                             <div className="p-2">
                               <p className="text-[10px] text-gray-400 mb-0.5">E{episodeNum}</p>
                               <p className="text-xs font-medium text-gray-800 dark:text-gray-200 line-clamp-1">
                                 {tmdb?.name ?? imdb?.title ?? `Episode ${episodeNum}`}
                               </p>
-                              {imdb?.imdbRating != null && (
-                                <div
-                                  className="mt-1 px-1.5 py-0.5 rounded-sm text-[10px] font-bold inline-flex"
-                                  style={getRatingStyle(imdb.imdbRating)}
-                                >
-                                  {imdb.imdbRating.toFixed(1)}
-                                </div>
-                              )}
                             </div>
                           </button>
                         ))}
@@ -580,6 +568,7 @@ export default function SeriesPreviewSheet({
                     )
                   )}
 
+                </div>
                 </div>
               </div>
             </div>
@@ -600,7 +589,8 @@ export default function SeriesPreviewSheet({
               />
             </button>
 
-              <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${imdbSectionOpen ? 'max-h-[200vh]' : 'max-h-0'}`}>
+              <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${imdbSectionOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+              <div className="overflow-hidden min-h-0">
               <div className="border-t border-black/6 dark:border-white/6">
 
                   {imdbError === 'no_key' && (
@@ -763,6 +753,7 @@ export default function SeriesPreviewSheet({
                   )}
 
                 </div>
+                </div>
               </div>
             </div>
 
@@ -773,7 +764,7 @@ export default function SeriesPreviewSheet({
       </SheetModal>
 
       {selectedEpisode && (
-        <EpisodeDetailSheet info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
+        <EpisodeDetailSheet key={`${selectedEpisode.seasonNum}-${selectedEpisode.episodeNum}`} info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
       )}
 
       {selectedActorId != null && (

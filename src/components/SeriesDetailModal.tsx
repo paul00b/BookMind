@@ -12,11 +12,12 @@ import { fetchSeasonDetails, fetchSeriesDetails, fetchSeriesWatchProviders, fetc
 import type { WatchProvidersResult } from '../types';
 import WatchProviders from './WatchProviders';
 import TrailerModal from './TrailerModal';
-import { X, Trash2, Tv, ChevronDown, FolderPlus, FolderMinus, Star, Play } from 'lucide-react';
+import { X, Trash2, Tv, ChevronDown, FolderPlus, FolderMinus, Play } from 'lucide-react';
+import EpisodeRatingBadge from './EpisodeRatingBadge';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { getRatingStyle, type SeasonState } from '../lib/imdbRatingStyle';
-import { fetchSeriesImdbId, fetchSeasonRatings, type EpisodeRating } from '../lib/imdb';
+import { fetchSeriesImdbId, fetchSeasonRatings, buildFlatEpisodeLookup, type EpisodeRating } from '../lib/imdb';
 import { getEffectiveSeriesStatus, isSeriesWaiting } from '../lib/seriesUtils';
 
 interface SelectedEpisodeInfo {
@@ -52,17 +53,7 @@ function EpisodeDetailSheet({ info, onClose }: { info: SelectedEpisodeInfo; onCl
           <div className="flex items-start justify-between gap-3">
             <h3 className="font-serif font-bold text-lg text-gray-900 dark:text-gray-100 leading-tight flex-1">{name}</h3>
             <div className="flex items-center gap-2 shrink-0">
-              {typeof info.tmdb?.vote_average === 'number' && info.tmdb.vote_average > 0 && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-                  <Star size={11} className="fill-current" />
-                  {info.tmdb.vote_average.toFixed(1)}
-                </span>
-              )}
-              {info.imdb?.imdbRating != null && (
-                <div className="px-3 py-1.5 rounded-lg text-sm font-extrabold" style={getRatingStyle(info.imdb.imdbRating)}>
-                  {info.imdb.imdbRating.toFixed(1)}
-                </div>
-              )}
+              <EpisodeRatingBadge imdb={info.imdb} tmdb={info.tmdb} size="md" />
             </div>
           </div>
           {(info.tmdb?.air_date || (info.tmdb?.runtime != null && info.tmdb.runtime > 0)) && (
@@ -171,12 +162,12 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
   useEffect(() => {
     if (!showImdbSection || imdbId || loadingImdb || imdbError) return;
     setLoadingImdb(true);
-    fetchSeriesImdbId(localSeries.title).then(id => {
+    fetchSeriesImdbId(localSeries.title, localSeries.first_air_date ? parseInt(localSeries.first_air_date.slice(0, 4), 10) : null).then(id => {
       setLoadingImdb(false);
       if (!id) { setImdbError('not_found'); return; }
       setImdbId(id);
     });
-  }, [showImdbSection, imdbId, loadingImdb, imdbError, localSeries.title, fetchKey]);
+  }, [showImdbSection, imdbId, loadingImdb, imdbError, localSeries.title, localSeries.first_air_date, fetchKey]);
 
   // Charge les saisons en parallèle une fois l'imdbID obtenu
   useEffect(() => {
@@ -243,8 +234,12 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
   const currentImdbEps = selectedSeason !== null && Array.isArray(seasonRatings[selectedSeason])
     ? (seasonRatings[selectedSeason] as EpisodeRating[])
     : [];
+  const imdbLookup = buildFlatEpisodeLookup(
+    seasonRatings,
+    Object.fromEntries((tmdbSeries?.seasons ?? []).filter(s => s.season_number > 0).map(s => [s.season_number, s.episode_count]))
+  );
   const episodesToShow = currentTmdbEps.length > 0
-    ? currentTmdbEps.map(ep => ({ episodeNum: ep.episode_number, tmdb: ep, imdb: currentImdbEps.find(ie => ie.episode === ep.episode_number) }))
+    ? currentTmdbEps.map(ep => ({ episodeNum: ep.episode_number, tmdb: ep, imdb: imdbLookup(selectedSeason ?? 0, ep.episode_number) }))
     : currentImdbEps.map(ep => ({ episodeNum: ep.episode, tmdb: undefined, imdb: ep }));
 
   const handleSelectSeason = async (season: number) => {
@@ -455,7 +450,8 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('seriesDetail.episodesSection')}</span>
                 <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 ${showSeasonsSection ? 'rotate-180' : ''}`} />
               </button>
-              <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${showSeasonsSection ? 'max-h-[9999px]' : 'max-h-0'}`}>
+              <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${showSeasonsSection ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                <div className="overflow-hidden min-h-0">
                 <div className="border-t border-black/6 dark:border-white/6">
                   {/* SeasonGrid */}
                   <div className="px-4 py-4">
@@ -495,7 +491,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                               onClick={() => setSelectedEpisode({ episodeNum, seasonNum: selectedSeason, tmdb, imdb })}
                               className="text-left bg-gray-50 dark:bg-gray-800/50 rounded-xl overflow-hidden hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors"
                             >
-                              <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                              <div className="relative w-full aspect-video bg-gray-200 dark:bg-gray-700 overflow-hidden">
                                 {tmdb?.still_path ? (
                                   <img src={`https://image.tmdb.org/t/p/w185${tmdb.still_path}`} alt={tmdb.name} className="w-full h-full object-cover" loading="lazy" />
                                 ) : (
@@ -503,17 +499,15 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                                     <Tv size={18} className="text-gray-400 dark:text-gray-500" />
                                   </div>
                                 )}
+                                <span className="absolute top-1.5 right-1.5">
+                                  <EpisodeRatingBadge imdb={imdb} tmdb={tmdb} />
+                                </span>
                               </div>
                               <div className="p-2">
                                 <p className="text-[10px] text-gray-400 mb-0.5">E{episodeNum}</p>
                                 <p className="text-xs font-medium text-gray-800 dark:text-gray-200 line-clamp-1">
                                   {tmdb?.name ?? imdb?.title ?? `Episode ${episodeNum}`}
                                 </p>
-                                {imdb?.imdbRating != null && (
-                                  <div className="mt-1 px-1.5 py-0.5 rounded-sm text-[10px] font-bold inline-flex" style={getRatingStyle(imdb.imdbRating)}>
-                                    {imdb.imdbRating.toFixed(1)}
-                                  </div>
-                                )}
                               </div>
                             </button>
                           ))}
@@ -523,6 +517,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                       )}
                     </div>
                   )}
+                </div>
                 </div>
               </div>
             </div>
@@ -537,7 +532,8 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('seriesDetail.imdbRatings')}</span>
               <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 ${showImdbSection ? 'rotate-180' : ''}`} />
             </button>
-            <div className={`overflow-clip transition-[max-height] duration-300 ease-in-out ${showImdbSection ? 'max-h-[2000px]' : 'max-h-0'}`}>
+            <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${showImdbSection ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+              <div className="overflow-hidden min-h-0">
               <div className="border-t border-black/6 dark:border-white/6">
                 {imdbError === 'no_key' && (
                   <p className="px-4 py-4 text-sm text-gray-400 text-center">{t('seriesDetail.imdbNoApiKey')}</p>
@@ -674,6 +670,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
                   </div>
                 )}
               </div>
+              </div>
             </div>
           </div>
 
@@ -742,7 +739,7 @@ export default function SeriesDetailModal({ series, onClose }: Props) {
     </SheetModal>
 
     {selectedEpisode && (
-      <EpisodeDetailSheet info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
+      <EpisodeDetailSheet key={`${selectedEpisode.seasonNum}-${selectedEpisode.episodeNum}`} info={selectedEpisode} onClose={() => setSelectedEpisode(null)} />
     )}
 
     {selectedActorId != null && (
